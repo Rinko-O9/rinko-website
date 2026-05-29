@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rinko's online living space</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Falling Pixels Container -->
+    <div class="falling-pixels" id="fallingPixels"></div>
+    
+    <!-- Desktop Background -->
+    <div class="desktop">
+        
+        <!-- Taskbar -->
+        <div class="taskbar">
+            <div class="start-btn">
+                <span class="logo">🪟</span>
+                <span>Start</span>
+            </div>
+            <div class="taskbar-items">
+                <div class="task-item active">rinko's space</div>
+            </div>
+            <div class="clock" id="clock">00:00 PM</div>
+        </div>
+
+        <!-- Main Window -->
+        <div class="window active-window" id="main-window">
+            <div class="title-bar">
+                <div class="title-bar-text">
+                    <span class="icon">🏠</span>
+                    rinko's online living space
+                </div>
+                <div class="title-bar-controls">
+                    <button class="btn-minimize">_</button>
+                    <button class="btn-maximize">□</button>
+                    <button class="btn-close">×</button>
+                </div>
+            </div>
+            
+            <div class="window-body">
+                <!-- Navigation Menu -->
+                <div class="menu-bar">
+                    <span class="menu-item active" onclick="showPage('home')">🏠 Home</span>
+                    <span class="menu-item" onclick="showPage('works')">📁 Works</span>
+                    <span class="menu-item" onclick="showPage('contact')">📧 Contact</span>
+                </div>
+
+                <!-- Content Area -->
+                <div class="content">
+                    
+                    <!-- HOME PAGE -->
+                    <div id="home" class="page active">
+                        <div class="welcome-header">
+                            <div class="avatar-placeholder">
+                                <span>📸</span>
+                            </div>
+                            <h1>hi, i'm rinko 🌿</h1>
+                            <p class="tagline">photographer | plant lover | creative soul</p>
+                        </div>
+                        
+                        <div class="pixel-divider"></div>
+                        
+                        <div class="intro-text">
+                            <p>welcome to my digital corner — a space where i share my lens on the world.</p>
+                            <p>based in shanghai, i chase light through streets and leaves, capturing moments that whisper rather than shout.</p>
+                            <p>this site is built with love and a touch of y2k nostalgia ✨</p>
+                        </div>
+                        
+                        <div class="quick-links">
+                            <div class="link-card" onclick="showPage('works')">
+                                <span class="link-icon">📷</span>
+                                <span>view my works</span>
+                            </div>
+                            <div class="link-card" onclick="showPage('contact')">
+                                <span class="link-icon">💌</span>
+                                <span>say hello</span>
+                            </div>
+                        </div>
+                        
+                        <div class="status-bar">
+                            <span class="status-light green"></span>
+                            <span>currently: chasing golden hour</span>
+                        </div>
+                    </div>
+
+                    <!-- WORKS PAGE -->
+                    <div id="works" class="page">
+                        <h2>📁 my works</h2>
+                        <p class="section-desc">a collection of moments frozen in time</p>
+                        
+                        <div class="filter-bar">
+                            <button class="filter-btn active" onclick="filterWorks('all')">all</button>
+                            <button class="filter-btn" onclick="filterWorks('photo')">photography</button>
+                            <button class="filter-btn" onclick="filterWorks('video')">video</button>
+                        </div>
+                        
+                        <div class="works-grid">
+                            <!-- Example Work Item - Replace with your own -->
+                            <div class="work-item" data-category="photo">
+                                <div class="work-thumb">
+                                    <div class="thumb-placeholder">
+                                        <span>🖼️</span>
+                                        <p>your photo here</p>
+                                    </div>
+                                    <div class="work-overlay">
+                                        <span class="view-icon">👁️</span>
+                                    </div>
+                                </div>
+                                <div class="work-info">
+                                    <h4>golden hour streets</h4>
+                                    <p class="work-meta">shanghai, 2024 | fujifilm x-t5</p>
+                                </div>
+                            </div>
+                            
+                            <div class="work-item" data-category="photo">
+                                <div class="work-thumb">
+                                    <div class="thumb-placeholder">
+                                        <span>🌿</span>
+                                        <p>your photo here</p>
+                                    </div>
+                                    <div class="work-overlay">
+                                        <span class="view-icon">👁️</span>
+                                    </div>
+                                </div>
+                                <div class="work-info">
+                                    <h4>botanical whispers</h4>
+                                    <p class="work-meta">home studio | vintage casio</p>
+                                </div>
+                            </div>
+                            
+                            <div class="work-item" data-category="video">
+                                <div class="work-thumb">
+                                    <div class="thumb-placeholder video">
+                                        <span>▶️</span>
+                                        <p>your video here</p>
+                                    </div>
+                                    <div class="work-overlay">
+                                        <span class="view-icon">▶️</span>
+                                    </div>
+                                </div>
+                                <div class="work-info">
+                                    <h4>moments in motion</h4>
+                                    <p class="work-meta">2024 | shanghai streets</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Add more work items following this pattern -->
+                        </div>
+                        
+                        <div class="add-more-hint">
+                            <p>💡 tip: edit <code>works</code> section in index.html to add your real photos and videos</p>
+                        </div>
+                    </div>
+
+                    <!-- CONTACT PAGE -->
+                    <div id="contact" class="page">
+                        <h2>📧 get in touch</h2>
+                        <p class="section-desc">let's create something together</p>
+                        
+                        <div class="contact-grid">
+                            <a href="https://www.tiktok.com/@rinko709" target="_blank" class="contact-card-link">
+                                <div class="contact-card">
+                                    <div class="contact-icon">🎵</div>
+                                    <h4>tiktok</h4>
+                                    <p>@rinko709</p>
+                                    <span class="contact-note">short videos & moments</span>
+                                </div>
+                            </a>
+                            
+                            <a href="https://www.xiaohongshu.com/user/profile/684f096a000000001b01a34f?xsec_token=ABoSlPkDsqR8d92CCCt06VXPhYUyjq5VTChxLpnSXfT2g%3D&xsec_source=pc_search" target="_blank" class="contact-card-link">
+                                <div class="contact-card">
+                                    <div class="contact-icon">📕</div>
+                                    <h4>小红书</h4>
+                                    <p>rinko's notes</p>
+                                    <span class="contact-note">lifestyle & photo shares</span>
+                                </div>
+                            </a>
+                            
+                            <a href="mailto:rinkoweng99@gmail.com" class="contact-card-link">
+                                <div class="contact-card">
+                                    <div class="contact-icon">📧</div>
+                                    <h4>email</h4>
+                                    <p>rinkoweng99@gmail.com</p>
+                                    <span class="contact-note">for project inquiries</span>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="pixel-divider"></div>
+                        
+                        <div class="message-form">
+                            <h3>📨 send a message</h3>
+                            <div class="form-fields">
+                                <div class="form-row">
+                                    <label>name:</label>
+                                    <input type="text" class="retro-input" placeholder="your name">
+                                </div>
+                                <div class="form-row">
+                                    <label>email:</label>
+                                    <input type="text" class="retro-input" placeholder="your@email.com">
+                                </div>
+                                <div class="form-row">
+                                    <label>message:</label>
+                                    <textarea class="retro-textarea" rows="4" placeholder="type your message here..."></textarea>
+                                </div>
+                            </div>
+                            <button class="retro-button" onclick="alert('message sent! (demo only)')">
+                                <span>📤</span> send message
+                            </button>
+                        </div>
+                        
+                        <div class="status-bar footer-status">
+                            <span class="status-light green"></span>
+                            <span>status: online and ready to create</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop Icons -->
+        <div class="desktop-icons">
+            <div class="desktop-icon" onclick="showPage('home')">
+                <div class="icon-img">🏠</div>
+                <div class="icon-label">home.exe</div>
+            </div>
+            <div class="desktop-icon" onclick="showPage('works')">
+                <div class="icon-img">📁</div>
+                <div class="icon-label">works.exe</div>
+            </div>
+            <div class="desktop-icon" onclick="showPage('contact')">
+                <div class="icon-img">📧</div>
+                <div class="icon-label">contact.exe</div>
+            </div>
+            <div class="desktop-icon">
+                <div class="icon-img">🌿</div>
+                <div class="icon-label">plants.exe</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
