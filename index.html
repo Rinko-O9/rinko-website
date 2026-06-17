@@ -225,8 +225,8 @@
 
     /* ── Keyframes ── */
     @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(20px) rotate(var(--rot, 0deg)); }
+      to   { opacity: 1; transform: translateY(0)    rotate(var(--rot, 0deg)); }
     }
     @keyframes fadeIn {
       from { opacity: 0; } to { opacity: 1; }
@@ -245,7 +245,7 @@
 
 <!-- ── ai-tvc (右上，蓝色选中) ── -->
 <div class="folder"
-     style="left: 63%; top: 34%; transform: rotate(3.4deg);"
+     style="left: 63%; top: 34%; --rot: 3.4deg;"
      data-type="coming" data-label="ai-tvc">
   <svg class="fsvg" style="width:clamp(90px,9vw,136px);height:auto;"
        viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
@@ -268,7 +268,7 @@
 
 <!-- ── 制片作品 (中央大) ── -->
 <div class="folder"
-     style="left: 28%; top: 51%; transform: rotate(-2.2deg);"
+     style="left: 28%; top: 51%; --rot: -2.2deg;"
      data-type="coming" data-label="制片作品-ai预告片">
   <svg class="fsvg" style="width:clamp(160px,18vw,268px);height:auto;"
        viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
@@ -291,7 +291,7 @@
 
 <!-- ── 一键生成短剧 (左中) ── -->
 <div class="folder"
-     style="left: 6%; top: 55%; transform: rotate(1.6deg);"
+     style="left: 6%; top: 55%; --rot: 1.6deg;"
      data-type="coming" data-label="一键生成短剧">
   <svg class="fsvg" style="width:clamp(110px,13vw,184px);height:auto;"
        viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
@@ -314,7 +314,7 @@
 
 <!-- ── AI Jazz (右下，音频) ── -->
 <div class="folder"
-     style="right: 6%; top: 60%; transform: rotate(-1.8deg);"
+     style="right: 6%; top: 60%; --rot: -1.8deg;"
      data-type="audio" data-netease="3358142132" data-label="ai jazz">
   <svg class="fsvg" style="width:clamp(70px,7.5vw,100px);height:auto;"
        viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
