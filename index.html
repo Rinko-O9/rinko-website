@@ -16,6 +16,20 @@
       position: relative;
       overflow: hidden;
       font-family: 'DM Mono', monospace;
+      cursor: none;
+    }
+
+    /* ── Grain overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 900;
+      opacity: 0.055;
+      background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='250' height='250'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='250' height='250' filter='url(%23n)'/></svg>");
+      background-size: 180px 180px;
+      mix-blend-mode: multiply;
     }
 
     /* ── Big text ── */
@@ -32,6 +46,8 @@
       pointer-events: none;
       user-select: none;
       white-space: nowrap;
+      will-change: transform;
+      transition: transform 0.1s ease-out;
     }
 
     /* ── Rule ── */
@@ -41,38 +57,56 @@
       left: 4%;
       right: 4%;
       height: 1px;
-      background: #C4C2B8;
+      background: #ECEBE3; /* same as background */
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 0.1s;
     }
 
     /* ── Meta tag ── */
     .meta {
       position: absolute;
-      top: calc(38% + 14px);
-      left: 5%;
+      top: calc(38% + 10px);
+      right: 4%;
       font-size: 11px;
-      color: #B0ADA4;
+      color: #ECEBE3; /* same as background = invisible */
       letter-spacing: 0.1em;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 0.15s;
     }
 
-    /* ── Folder ── */
+    /* ── Folder wrapper ── */
     .folder {
       position: absolute;
       text-align: center;
+      opacity: 0;
+      animation: fadeSlideUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
     }
 
-    .folder.clickable {
-      cursor: pointer;
-    }
+    .folder.clickable { cursor: none; }
 
     .folder.clickable:hover .fsvg {
-      transform: translateY(-6px);
-      filter: brightness(1.06);
+      filter: brightness(1.07);
     }
+
+    /* Float wrapper */
+    .fwrap { display: inline-block; }
+
+    .folder:nth-child(1) { animation-delay: 0.08s; }
+    .folder:nth-child(1) .fwrap { animation: floatA 4.4s ease-in-out infinite 0.8s; }
+
+    .folder:nth-child(2) { animation-delay: 0.22s; }
+    .folder:nth-child(2) .fwrap { animation: floatB 5.6s ease-in-out infinite 0.95s; }
+
+    .folder:nth-child(3) { animation-delay: 0.36s; }
+    .folder:nth-child(3) .fwrap { animation: floatC 4.0s ease-in-out infinite 1.1s; }
+
+    .folder:nth-child(4) { animation-delay: 0.50s; }
+    .folder:nth-child(4) .fwrap { animation: floatD 5.0s ease-in-out infinite 1.25s; }
 
     .fsvg {
       display: block;
       margin: 0 auto;
-      transition: transform 0.2s ease, filter 0.2s ease;
+      transition: filter 0.2s ease;
     }
 
     .flabel {
@@ -92,11 +126,14 @@
       border-radius: 4px;
     }
 
-    /* ── Cursor decoration ── */
-    .cursor {
-      position: absolute;
+    /* ── Decorative cursor ── */
+    .decor-cursor {
+      position: fixed;
       pointer-events: none;
       user-select: none;
+      z-index: 950;
+      will-change: left, top;
+      opacity: 0.75;
     }
 
     /* ── Byline ── */
@@ -108,15 +145,8 @@
       font-size: 11px;
       letter-spacing: 0.12em;
       color: #A8A49C;
-    }
-
-    /* ── Coming soon badge ── */
-    .soon {
-      display: inline-block;
-      margin-top: 8px;
-      font-size: 10px;
-      color: #C4C2B8;
-      letter-spacing: 0.06em;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 0.7s;
     }
 
     /* ── Modal ── */
@@ -125,7 +155,7 @@
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.84);
-      z-index: 200;
+      z-index: 1000;
       align-items: center;
       justify-content: center;
       backdrop-filter: blur(10px);
@@ -173,137 +203,156 @@
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       transition: color 0.15s, border-color 0.15s;
-      font-family: sans-serif;
     }
     .modal-close:hover { color: #FFF; border-color: #888; }
+
+    /* ── Keyframes ── */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes floatA {
+      0%,100% { transform: translateY(0px);   }
+      50%     { transform: translateY(-8px);  }
+    }
+    @keyframes floatB {
+      0%,100% { transform: translateY(0px);   }
+      50%     { transform: translateY(-6px);  }
+    }
+    @keyframes floatC {
+      0%,100% { transform: translateY(0px);   }
+      50%     { transform: translateY(-10px); }
+    }
+    @keyframes floatD {
+      0%,100% { transform: translateY(0px);   }
+      50%     { transform: translateY(-5px);  }
+    }
   </style>
 </head>
 <body>
 
 <!-- ── Big editorial text ── -->
-<div class="bg-text">AI<br>SHOWCASE</div>
+<div class="bg-text" id="bgText">AI<br>SHOWCASE</div>
 
-<!-- ── Divider ── -->
+<!-- ── Rule + meta ── -->
 <div class="rule"></div>
 <div class="meta">2026·wenghao·portfolio</div>
 
-<!-- ────────────────────────────────────────
+<!-- ────────────────────────────────────
      FOLDERS
-     data-vimeo: Vimeo 视频ID，留空 = coming soon
-     data-label: 显示在 modal 顶部的名称
-     style: left/right/top 调整位置，transform rotate 调整倾斜
-─────────────────────────────────────────── -->
+     data-vimeo: 视频ID，空 = coming soon
+──────────────────────────────────── -->
 
-<!-- Folder: ai-tvc (右上，蓝色选中) -->
+<!-- ai-tvc -->
 <div class="folder clickable"
      style="left: 57%; top: 16%; transform: rotate(3.4deg);"
      data-vimeo="1202148449"
      data-label="ai-tvc">
-  <svg class="fsvg" width="clamp(90px,9vw,136px)" height="clamp(72px,7.2vw,109px)"
-       style="width:clamp(90px,9vw,136px);height:auto;"
-       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-    <defs>
-      <linearGradient id="g-atvc" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
-      </linearGradient>
-      <linearGradient id="sh-atvc" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
-        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
-      </linearGradient>
-      <filter id="drop-atvc">
-        <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1244A6" flood-opacity="0.22"/>
-      </filter>
-    </defs>
-    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
-    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g-atvc)" filter="url(#drop-atvc)"/>
-    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh-atvc)"/>
-  </svg>
+  <div class="fwrap">
+    <svg class="fsvg" style="width:clamp(90px,9vw,136px);height:auto;"
+         viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+        </linearGradient>
+        <linearGradient id="sh1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+          <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="d1"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1244A6" flood-opacity="0.22"/></filter>
+      </defs>
+      <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+      <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g1)" filter="url(#d1)"/>
+      <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh1)"/>
+    </svg>
+  </div>
   <span class="flabel sel">ai-tvc</span>
 </div>
 
-<!-- Folder: 制片作品-ai预告片 (中央大) -->
+<!-- 制片作品-ai预告片 -->
 <div class="folder clickable"
      style="left: 35%; top: 53%; transform: rotate(-2.2deg);"
      data-vimeo=""
      data-label="制片作品-ai预告片">
-  <svg class="fsvg"
-       style="width:clamp(160px,18vw,268px);height:auto;"
-       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-    <defs>
-      <linearGradient id="g-zp" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
-      </linearGradient>
-      <linearGradient id="sh-zp" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
-        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
-      </linearGradient>
-      <filter id="drop-zp">
-        <feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#1244A6" flood-opacity="0.28"/>
-      </filter>
-    </defs>
-    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
-    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g-zp)" filter="url(#drop-zp)"/>
-    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh-zp)"/>
-  </svg>
+  <div class="fwrap">
+    <svg class="fsvg" style="width:clamp(160px,18vw,268px);height:auto;"
+         viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+      <defs>
+        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+        </linearGradient>
+        <linearGradient id="sh2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+          <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="d2"><feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#1244A6" flood-opacity="0.28"/></filter>
+      </defs>
+      <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+      <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g2)" filter="url(#d2)"/>
+      <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh2)"/>
+    </svg>
+  </div>
   <span class="flabel">制片作品-ai预告片</span>
 </div>
 
-<!-- Folder: 一键生成短剧 (左中) -->
+<!-- 一键生成短剧 -->
 <div class="folder clickable"
      style="left: 6%; top: 55%; transform: rotate(1.6deg);"
      data-vimeo=""
      data-label="一键生成短剧">
-  <svg class="fsvg"
-       style="width:clamp(110px,13vw,184px);height:auto;"
-       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-    <defs>
-      <linearGradient id="g-yj" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
-      </linearGradient>
-      <linearGradient id="sh-yj" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
-        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
-      </linearGradient>
-      <filter id="drop-yj">
-        <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1244A6" flood-opacity="0.22"/>
-      </filter>
-    </defs>
-    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
-    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g-yj)" filter="url(#drop-yj)"/>
-    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh-yj)"/>
-  </svg>
+  <div class="fwrap">
+    <svg class="fsvg" style="width:clamp(110px,13vw,184px);height:auto;"
+         viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+      <defs>
+        <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+        </linearGradient>
+        <linearGradient id="sh3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+          <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="d3"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1244A6" flood-opacity="0.22"/></filter>
+      </defs>
+      <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+      <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g3)" filter="url(#d3)"/>
+      <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh3)"/>
+    </svg>
+  </div>
   <span class="flabel">一键生成短剧</span>
 </div>
 
-<!-- Folder: ai jazz (右下小) -->
+<!-- ai jazz -->
 <div class="folder clickable"
      style="right: 7%; top: 67%; transform: rotate(-1.8deg);"
      data-vimeo=""
      data-label="ai jazz">
-  <svg class="fsvg"
-       style="width:clamp(70px,7.5vw,100px);height:auto;"
-       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-    <defs>
-      <linearGradient id="g-aj" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
-      </linearGradient>
-      <linearGradient id="sh-aj" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
-        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
-      </linearGradient>
-      <filter id="drop-aj">
-        <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1244A6" flood-opacity="0.2"/>
-      </filter>
-    </defs>
-    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
-    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g-aj)" filter="url(#drop-aj)"/>
-    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh-aj)"/>
-  </svg>
+  <div class="fwrap">
+    <svg class="fsvg" style="width:clamp(70px,7.5vw,100px);height:auto;"
+         viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+      <defs>
+        <linearGradient id="g4" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+        </linearGradient>
+        <linearGradient id="sh4" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+          <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="d4"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1244A6" flood-opacity="0.2"/></filter>
+      </defs>
+      <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+      <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g4)" filter="url(#d4)"/>
+      <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh4)"/>
+    </svg>
+  </div>
   <span class="flabel">ai jazz</span>
 </div>
 
-<!-- ── Cursor decoration ── -->
-<div class="cursor" style="left: 55%; top: 63%;">
+<!-- ── Decorative cursor (follows mouse) ── -->
+<div class="decor-cursor" id="decorCursor">
   <svg width="28" height="32" viewBox="0 0 14 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
     <path d="M2,1 L2,13 L5,10 L7,15 L9,14 L7,9 L11,9 Z"
           fill="#1A1714" stroke="#ECEBE3" stroke-width="1.3"
@@ -325,64 +374,70 @@
 </div>
 
 <script>
+  /* ── Lazy cursor follow ── */
+  const decorCursor = document.getElementById('decorCursor');
+  let tx = window.innerWidth * 0.55, ty = window.innerHeight * 0.63;
+  let cx = tx, cy = ty;
+
+  document.addEventListener('mousemove', e => { tx = e.clientX + 14; ty = e.clientY + 14; });
+
+  (function tick() {
+    cx += (tx - cx) * 0.07;
+    cy += (ty - cy) * 0.07;
+    decorCursor.style.left = cx + 'px';
+    decorCursor.style.top  = cy + 'px';
+    requestAnimationFrame(tick);
+  })();
+
+  /* ── Text parallax ── */
+  const bgText = document.getElementById('bgText');
+  document.addEventListener('mousemove', e => {
+    const rx = (e.clientX / window.innerWidth  - 0.5);
+    const ry = (e.clientY / window.innerHeight - 0.5);
+    bgText.style.transform = `translate(${rx * 9}px, ${ry * 6}px)`;
+  });
+
+  /* ── Modal ── */
   const modal      = document.getElementById('modal');
   const modalBox   = document.getElementById('modalBox');
   const modalLabel = document.getElementById('modalLabel');
   const modalClose = document.getElementById('modalClose');
   const modalBar   = modalBox.querySelector('.modal-bar');
-  let activeFrame  = null;
+  let activeEl     = null;
 
   document.querySelectorAll('.folder.clickable').forEach(folder => {
     folder.addEventListener('click', () => {
-      const vimeoId = folder.dataset.vimeo;
-      const label   = folder.dataset.label;
+      const id    = folder.dataset.vimeo;
+      const label = folder.dataset.label;
+      if (activeEl) activeEl.remove();
 
-      if (!vimeoId) {
-        // No video yet — show coming soon
-        if (activeFrame) { activeFrame.remove(); activeFrame = null; }
+      if (!id) {
         const msg = document.createElement('div');
-        msg.style.cssText = `
-          width: min(540px, 86vw);
-          aspect-ratio: 16/9;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          background: #111;
-          color: #555;
-          font-family: 'DM Mono', 'PingFang SC', monospace;
-          font-size: 13px;
-          letter-spacing: 0.06em;
-          gap: 10px;
-        `;
-        msg.innerHTML = `<span style="font-size:28px;opacity:0.3">📁</span><span>coming soon</span>`;
+        msg.style.cssText = 'width:min(540px,86vw);aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;color:#444;font-family:"DM Mono","PingFang SC",monospace;font-size:12px;letter-spacing:.06em;gap:10px;';
+        msg.innerHTML = '<span style="font-size:26px;opacity:.25">📁</span><span>coming soon</span>';
         modalBox.insertBefore(msg, modalBar);
-        activeFrame = msg;
-        modalLabel.textContent = label;
-        modal.classList.add('open');
-        return;
+        activeEl = msg;
+      } else {
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0&color=ffffff`;
+        iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+        iframe.allowFullscreen = true;
+        modalBox.insertBefore(iframe, modalBar);
+        activeEl = iframe;
       }
 
-      if (activeFrame) activeFrame.remove();
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0&color=ffffff`;
-      iframe.allow = 'autoplay; fullscreen; picture-in-picture';
-      iframe.allowFullscreen = true;
-      modalBox.insertBefore(iframe, modalBar);
-      activeFrame = iframe;
       modalLabel.textContent = label;
       modal.classList.add('open');
     });
   });
 
-  function closeModal() {
+  const closeModal = () => {
     modal.classList.remove('open');
-    if (activeFrame) {
-      if (activeFrame.tagName === 'IFRAME') activeFrame.src = '';
-      activeFrame.remove();
-      activeFrame = null;
+    if (activeEl) {
+      if (activeEl.tagName === 'IFRAME') activeEl.src = '';
+      activeEl.remove(); activeEl = null;
     }
-  }
+  };
 
   modalClose.addEventListener('click', closeModal);
   modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
