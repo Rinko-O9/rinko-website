@@ -16,17 +16,16 @@
       position: relative;
       overflow: hidden;
       font-family: 'DM Mono', monospace;
-      cursor: none;
     }
 
-    /* ── Grain overlay ── */
+    /* ── Grain ── */
     body::after {
       content: '';
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 900;
-      opacity: 0.055;
+      opacity: 0.05;
       background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='250' height='250'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='250' height='250' filter='url(%23n)'/></svg>");
       background-size: 180px 180px;
       mix-blend-mode: multiply;
@@ -47,7 +46,6 @@
       user-select: none;
       white-space: nowrap;
       will-change: transform;
-      transition: transform 0.1s ease-out;
     }
 
     /* ── Rule ── */
@@ -57,56 +55,42 @@
       left: 4%;
       right: 4%;
       height: 1px;
-      background: #ECEBE3; /* same as background */
-      opacity: 0;
-      animation: fadeIn 0.8s ease forwards 0.1s;
+      background: #ECEBE3;
     }
 
-    /* ── Meta tag ── */
+    /* ── Meta ── */
     .meta {
       position: absolute;
       top: calc(38% + 10px);
       right: 4%;
       font-size: 11px;
-      color: #ECEBE3; /* same as background = invisible */
+      color: #ECEBE3;
       letter-spacing: 0.1em;
-      opacity: 0;
-      animation: fadeIn 0.8s ease forwards 0.15s;
     }
 
-    /* ── Folder wrapper ── */
+    /* ── Folders ── */
     .folder {
       position: absolute;
       text-align: center;
+      cursor: pointer;
       opacity: 0;
-      animation: fadeSlideUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+      animation: fadeSlideUp 0.65s cubic-bezier(0.22,1,0.36,1) forwards;
     }
 
-    .folder.clickable { cursor: none; }
-
-    .folder.clickable:hover .fsvg {
-      filter: brightness(1.07);
-    }
-
-    /* Float wrapper */
-    .fwrap { display: inline-block; }
-
-    .folder:nth-child(1) { animation-delay: 0.08s; }
-    .folder:nth-child(1) .fwrap { animation: floatA 4.4s ease-in-out infinite 0.8s; }
-
-    .folder:nth-child(2) { animation-delay: 0.22s; }
-    .folder:nth-child(2) .fwrap { animation: floatB 5.6s ease-in-out infinite 0.95s; }
-
-    .folder:nth-child(3) { animation-delay: 0.36s; }
-    .folder:nth-child(3) .fwrap { animation: floatC 4.0s ease-in-out infinite 1.1s; }
-
-    .folder:nth-child(4) { animation-delay: 0.50s; }
-    .folder:nth-child(4) .fwrap { animation: floatD 5.0s ease-in-out infinite 1.25s; }
+    .folder:nth-child(3) { animation-delay: 0.05s; }
+    .folder:nth-child(4) { animation-delay: 0.18s; }
+    .folder:nth-child(5) { animation-delay: 0.31s; }
+    .folder:nth-child(6) { animation-delay: 0.44s; }
 
     .fsvg {
       display: block;
       margin: 0 auto;
-      transition: filter 0.2s ease;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .folder:hover .fsvg {
+      transform: translateY(-6px);
+      filter: brightness(1.07);
     }
 
     .flabel {
@@ -116,7 +100,6 @@
       font-size: clamp(10px, 0.85vw, 14px);
       color: #2C2A26;
       white-space: nowrap;
-      line-height: 1;
     }
 
     .flabel.sel {
@@ -124,16 +107,6 @@
       color: #fff;
       padding: 3px 9px;
       border-radius: 4px;
-    }
-
-    /* ── Decorative cursor ── */
-    .decor-cursor {
-      position: fixed;
-      pointer-events: none;
-      user-select: none;
-      z-index: 950;
-      will-change: left, top;
-      opacity: 0.75;
     }
 
     /* ── Byline ── */
@@ -149,7 +122,7 @@
       animation: fadeIn 1s ease forwards 0.7s;
     }
 
-    /* ── Modal ── */
+    /* ── Video Modal ── */
     .modal {
       display: none;
       position: fixed;
@@ -171,7 +144,7 @@
       max-width: 90vw;
     }
 
-    .modal-box iframe {
+    .modal-box iframe.vid {
       display: block;
       width: min(900px, 86vw);
       aspect-ratio: 16/9;
@@ -206,161 +179,162 @@
     }
     .modal-close:hover { color: #FFF; border-color: #888; }
 
+    /* ── Audio Modal ── */
+    .audio-panel {
+      width: min(380px, 88vw);
+      padding: 32px 28px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .audio-waveform {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 32px;
+    }
+
+    .audio-waveform span {
+      display: block;
+      width: 3px;
+      border-radius: 2px;
+      background: #3576E6;
+      transform-origin: bottom;
+      animation: waveBar 1s ease-in-out infinite alternate;
+    }
+
+    .audio-info { display: flex; flex-direction: column; gap: 4px; }
+
+    .audio-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 16px;
+      color: #EEEAE2;
+      letter-spacing: 0.05em;
+    }
+
+    .audio-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: #444;
+      letter-spacing: 0.08em;
+    }
+
+    .audio-embed { line-height: 0; }
+    .audio-embed iframe { border-radius: 0 0 4px 4px; }
+
     /* ── Keyframes ── */
     @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(22px); }
+      from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      from { opacity: 0; } to { opacity: 1; }
     }
-    @keyframes floatA {
-      0%,100% { transform: translateY(0px);   }
-      50%     { transform: translateY(-8px);  }
-    }
-    @keyframes floatB {
-      0%,100% { transform: translateY(0px);   }
-      50%     { transform: translateY(-6px);  }
-    }
-    @keyframes floatC {
-      0%,100% { transform: translateY(0px);   }
-      50%     { transform: translateY(-10px); }
-    }
-    @keyframes floatD {
-      0%,100% { transform: translateY(0px);   }
-      50%     { transform: translateY(-5px);  }
+    @keyframes waveBar {
+      from { opacity: 0.25; transform: scaleY(0.2); }
+      to   { opacity: 1;    transform: scaleY(1);   }
     }
   </style>
 </head>
 <body>
 
-<!-- ── Big editorial text ── -->
 <div class="bg-text" id="bgText">AI<br>SHOWCASE</div>
-
-<!-- ── Rule + meta ── -->
 <div class="rule"></div>
 <div class="meta">2026·wenghao·portfolio</div>
 
-<!-- ────────────────────────────────────
-     FOLDERS
-     data-vimeo: 视频ID，空 = coming soon
-──────────────────────────────────── -->
-
-<!-- ai-tvc -->
-<div class="folder clickable"
+<!-- ── ai-tvc (右上，蓝色选中) ── -->
+<div class="folder"
      style="left: 57%; top: 16%; transform: rotate(3.4deg);"
-     data-vimeo="1202148449"
-     data-label="ai-tvc">
-  <div class="fwrap">
-    <svg class="fsvg" style="width:clamp(90px,9vw,136px);height:auto;"
-         viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-      <defs>
-        <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
-        </linearGradient>
-        <linearGradient id="sh1" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
-          <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
-        </linearGradient>
-        <filter id="d1"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1244A6" flood-opacity="0.22"/></filter>
-      </defs>
-      <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
-      <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g1)" filter="url(#d1)"/>
-      <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh1)"/>
-    </svg>
-  </div>
+     data-type="coming" data-label="ai-tvc">
+  <svg class="fsvg" style="width:clamp(90px,9vw,136px);height:auto;"
+       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+      </linearGradient>
+      <linearGradient id="sh1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="d1"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1244A6" flood-opacity="0.22"/></filter>
+    </defs>
+    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g1)" filter="url(#d1)"/>
+    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh1)"/>
+  </svg>
   <span class="flabel sel">ai-tvc</span>
 </div>
 
-<!-- 制片作品-ai预告片 -->
-<div class="folder clickable"
+<!-- ── 制片作品 (中央大) ── -->
+<div class="folder"
      style="left: 35%; top: 53%; transform: rotate(-2.2deg);"
-     data-vimeo=""
-     data-label="制片作品-ai预告片">
-  <div class="fwrap">
-    <svg class="fsvg" style="width:clamp(160px,18vw,268px);height:auto;"
-         viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-      <defs>
-        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
-        </linearGradient>
-        <linearGradient id="sh2" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
-          <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
-        </linearGradient>
-        <filter id="d2"><feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#1244A6" flood-opacity="0.28"/></filter>
-      </defs>
-      <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
-      <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g2)" filter="url(#d2)"/>
-      <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh2)"/>
-    </svg>
-  </div>
+     data-type="coming" data-label="制片作品-ai预告片">
+  <svg class="fsvg" style="width:clamp(160px,18vw,268px);height:auto;"
+       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+    <defs>
+      <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+      </linearGradient>
+      <linearGradient id="sh2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="d2"><feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#1244A6" flood-opacity="0.28"/></filter>
+    </defs>
+    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g2)" filter="url(#d2)"/>
+    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh2)"/>
+  </svg>
   <span class="flabel">制片作品-ai预告片</span>
 </div>
 
-<!-- 一键生成短剧 -->
-<div class="folder clickable"
+<!-- ── 一键生成短剧 (左中) ── -->
+<div class="folder"
      style="left: 6%; top: 55%; transform: rotate(1.6deg);"
-     data-vimeo=""
-     data-label="一键生成短剧">
-  <div class="fwrap">
-    <svg class="fsvg" style="width:clamp(110px,13vw,184px);height:auto;"
-         viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-      <defs>
-        <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
-        </linearGradient>
-        <linearGradient id="sh3" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
-          <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
-        </linearGradient>
-        <filter id="d3"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1244A6" flood-opacity="0.22"/></filter>
-      </defs>
-      <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
-      <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g3)" filter="url(#d3)"/>
-      <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh3)"/>
-    </svg>
-  </div>
+     data-type="coming" data-label="一键生成短剧">
+  <svg class="fsvg" style="width:clamp(110px,13vw,184px);height:auto;"
+       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+    <defs>
+      <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+      </linearGradient>
+      <linearGradient id="sh3" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="d3"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1244A6" flood-opacity="0.22"/></filter>
+    </defs>
+    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g3)" filter="url(#d3)"/>
+    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh3)"/>
+  </svg>
   <span class="flabel">一键生成短剧</span>
 </div>
 
-<!-- ai jazz -->
-<div class="folder clickable"
+<!-- ── AI Jazz (右下，音频) ── -->
+<div class="folder"
      style="right: 7%; top: 67%; transform: rotate(-1.8deg);"
-     data-vimeo=""
-     data-label="ai jazz">
-  <div class="fwrap">
-    <svg class="fsvg" style="width:clamp(70px,7.5vw,100px);height:auto;"
-         viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-      <defs>
-        <linearGradient id="g4" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
-        </linearGradient>
-        <linearGradient id="sh4" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
-          <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
-        </linearGradient>
-        <filter id="d4"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1244A6" flood-opacity="0.2"/></filter>
-      </defs>
-      <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
-      <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g4)" filter="url(#d4)"/>
-      <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh4)"/>
-    </svg>
-  </div>
+     data-type="audio" data-netease="3358142132" data-label="ai jazz">
+  <svg class="fsvg" style="width:clamp(70px,7.5vw,100px);height:auto;"
+       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+    <defs>
+      <linearGradient id="g4" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+      </linearGradient>
+      <linearGradient id="sh4" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="d4"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1244A6" flood-opacity="0.2"/></filter>
+    </defs>
+    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g4)" filter="url(#d4)"/>
+    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh4)"/>
+  </svg>
   <span class="flabel">ai jazz</span>
 </div>
 
-<!-- ── Decorative cursor (follows mouse) ── -->
-<div class="decor-cursor" id="decorCursor">
-  <svg width="28" height="32" viewBox="0 0 14 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-    <path d="M2,1 L2,13 L5,10 L7,15 L9,14 L7,9 L11,9 Z"
-          fill="#1A1714" stroke="#ECEBE3" stroke-width="1.3"
-          stroke-linejoin="round" paint-order="stroke fill"/>
-  </svg>
-</div>
-
-<!-- ── Byline ── -->
 <div class="byline">rinko_wen</div>
 
 <!-- ── Modal ── -->
@@ -374,22 +348,7 @@
 </div>
 
 <script>
-  /* ── Lazy cursor follow ── */
-  const decorCursor = document.getElementById('decorCursor');
-  let tx = window.innerWidth * 0.55, ty = window.innerHeight * 0.63;
-  let cx = tx, cy = ty;
-
-  document.addEventListener('mousemove', e => { tx = e.clientX + 14; ty = e.clientY + 14; });
-
-  (function tick() {
-    cx += (tx - cx) * 0.07;
-    cy += (ty - cy) * 0.07;
-    decorCursor.style.left = cx + 'px';
-    decorCursor.style.top  = cy + 'px';
-    requestAnimationFrame(tick);
-  })();
-
-  /* ── Text parallax ── */
+  /* ── Text parallax only (mild) ── */
   const bgText = document.getElementById('bgText');
   document.addEventListener('mousemove', e => {
     const rx = (e.clientX / window.innerWidth  - 0.5);
@@ -397,7 +356,7 @@
     bgText.style.transform = `translate(${rx * 9}px, ${ry * 6}px)`;
   });
 
-  /* ── Modal ── */
+  /* ── Modal logic ── */
   const modal      = document.getElementById('modal');
   const modalBox   = document.getElementById('modalBox');
   const modalLabel = document.getElementById('modalLabel');
@@ -405,25 +364,62 @@
   const modalBar   = modalBox.querySelector('.modal-bar');
   let activeEl     = null;
 
-  document.querySelectorAll('.folder.clickable').forEach(folder => {
-    folder.addEventListener('click', () => {
-      const id    = folder.dataset.vimeo;
-      const label = folder.dataset.label;
-      if (activeEl) activeEl.remove();
+  /* Build waveform bars */
+  function makeWaveform() {
+    const heights = [30,55,80,45,90,60,75,40,95,65,50,85,35,70,55,80,45,60,90,40];
+    const wrap = document.createElement('div');
+    wrap.className = 'audio-waveform';
+    heights.forEach((h, i) => {
+      const bar = document.createElement('span');
+      bar.style.height = h + '%';
+      bar.style.animationDelay = (i * 0.06) + 's';
+      bar.style.animationDuration = (0.8 + (i % 4) * 0.15) + 's';
+      wrap.appendChild(bar);
+    });
+    return wrap;
+  }
 
-      if (!id) {
-        const msg = document.createElement('div');
-        msg.style.cssText = 'width:min(540px,86vw);aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;color:#444;font-family:"DM Mono","PingFang SC",monospace;font-size:12px;letter-spacing:.06em;gap:10px;';
-        msg.innerHTML = '<span style="font-size:26px;opacity:.25">📁</span><span>coming soon</span>';
-        modalBox.insertBefore(msg, modalBar);
-        activeEl = msg;
-      } else {
+  document.querySelectorAll('.folder').forEach(folder => {
+    folder.addEventListener('click', () => {
+      const type    = folder.dataset.type;
+      const label   = folder.dataset.label;
+      if (activeEl) { activeEl.remove(); activeEl = null; }
+
+      if (type === 'audio') {
+        const id = folder.dataset.netease;
+        const panel = document.createElement('div');
+        panel.className = 'audio-panel';
+        panel.appendChild(makeWaveform());
+        panel.innerHTML += `
+          <div class="audio-info">
+            <div class="audio-title">${label}</div>
+            <div class="audio-sub">wenghao · 2026</div>
+          </div>
+          <div class="audio-embed">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0"
+                    width="100%" height="86"
+                    src="//music.163.com/outchain/player?type=2&id=${id}&auto=1&height=66">
+            </iframe>
+          </div>`;
+        modalBox.insertBefore(panel, modalBar);
+        activeEl = panel;
+
+      } else if (type === 'vimeo') {
+        const id = folder.dataset.vimeo;
         const iframe = document.createElement('iframe');
-        iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0&color=ffffff`;
+        iframe.className = 'vid';
+        iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0`;
         iframe.allow = 'autoplay; fullscreen; picture-in-picture';
         iframe.allowFullscreen = true;
         modalBox.insertBefore(iframe, modalBar);
         activeEl = iframe;
+
+      } else {
+        const msg = document.createElement('div');
+        msg.style.cssText = 'width:min(480px,86vw);aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;color:#444;font-family:"DM Mono","PingFang SC",monospace;font-size:12px;letter-spacing:.06em;gap:10px;';
+        msg.innerHTML = '<span style="font-size:26px;opacity:.2">📁</span><span>coming soon</span>';
+        modalBox.insertBefore(msg, modalBar);
+        activeEl = msg;
       }
 
       modalLabel.textContent = label;
