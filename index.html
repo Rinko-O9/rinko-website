@@ -326,14 +326,13 @@
     .jbtn.jplay:hover { background: #E0E0E0; color: #111; }
 
     .jazz-iframe {
-      position: fixed;
-      top: -200px;
-      left: 0;
-      width: 300px;
-      height: 86px;
-      opacity: 0;
-      pointer-events: none;
+      display: block;
+      width: 100%;
+      height: 66px;
       border: none;
+      margin-top: 14px;
+      border-radius: 8px;
+      overflow: hidden;
     }
 
     /* ── Top CLI bar ── */
@@ -475,7 +474,7 @@
 <div class="meta">2026·wenghao·portfolio</div>
 
 <!-- ── ai-tvc: 字母A和S之间 ── -->
-<div class="fw" style="left:63%; top:37%; transform:rotate(3.4deg);">
+<div class="fw" style="left:63%; top:41%; transform:rotate(3.4deg);">
   <div class="folder" style="animation-delay:0.05s;"
        data-type="vimeo" data-vimeo="1202148449" data-label="ai-tvc">
     <svg class="fsvg" style="width:clamp(90px,9vw,136px);height:auto;"
@@ -677,8 +676,9 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
               </button>
             </div>
-            <iframe class="jazz-iframe" frameborder="no"
-                    src="//music.163.com/outchain/player?type=2&id=${id}&auto=1&height=66"></iframe>
+            <iframe class="jazz-iframe" frameborder="no" border="0"
+                    marginwidth="0" marginheight="0" scrolling="no"
+                    src="//music.163.com/outchain/player?type=2&id=${id}&auto=0&height=66"></iframe>
           </div>
           <div class="jazz-knob-wrap"><div class="jazz-knob"></div></div>`;
         modalBox.insertBefore(outer, modalBar);
@@ -725,8 +725,7 @@
     modal.classList.remove('open');
     modalBox.classList.remove('jazz-mode');
     if (activeEl) {
-      const iframe = activeEl.querySelector ? activeEl.querySelector('iframe') : null;
-      if (iframe) iframe.src = '';
+      if (activeEl.querySelectorAll) activeEl.querySelectorAll('iframe').forEach(f => { f.src = ''; });
       if (activeEl.tagName === 'IFRAME') activeEl.src = '';
       activeEl.remove(); activeEl = null;
     }
