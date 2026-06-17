@@ -1,247 +1,392 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rinko's online living space</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wenghao — AI Showcase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #ECEBE3;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── Big text ── */
+    .bg-text {
+      position: absolute;
+      top: -0.04em;
+      left: -0.02em;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 900;
+      font-size: clamp(80px, 16vw, 220px);
+      line-height: 0.86;
+      letter-spacing: -0.025em;
+      color: #1A1714;
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    /* ── Rule ── */
+    .rule {
+      position: absolute;
+      top: 38%;
+      left: 4%;
+      right: 4%;
+      height: 1px;
+      background: #C4C2B8;
+    }
+
+    /* ── Meta tag ── */
+    .meta {
+      position: absolute;
+      top: calc(38% + 14px);
+      left: 5%;
+      font-size: 11px;
+      color: #B0ADA4;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── Folder ── */
+    .folder {
+      position: absolute;
+      text-align: center;
+    }
+
+    .folder.clickable {
+      cursor: pointer;
+    }
+
+    .folder.clickable:hover .fsvg {
+      transform: translateY(-6px);
+      filter: brightness(1.06);
+    }
+
+    .fsvg {
+      display: block;
+      margin: 0 auto;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .flabel {
+      display: inline-block;
+      margin-top: 8px;
+      font-family: 'DM Mono', 'PingFang SC', monospace;
+      font-size: clamp(10px, 0.85vw, 14px);
+      color: #2C2A26;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .flabel.sel {
+      background: #3576E6;
+      color: #fff;
+      padding: 3px 9px;
+      border-radius: 4px;
+    }
+
+    /* ── Cursor decoration ── */
+    .cursor {
+      position: absolute;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ── Byline ── */
+    .byline {
+      position: absolute;
+      bottom: 36px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: #A8A49C;
+    }
+
+    /* ── Coming soon badge ── */
+    .soon {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 10px;
+      color: #C4C2B8;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Modal ── */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.84);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+    .modal.open { display: flex; }
+
+    .modal-box {
+      background: #0E0E0E;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #2A2A2A;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.65);
+      max-width: 90vw;
+    }
+
+    .modal-box iframe {
+      display: block;
+      width: min(900px, 86vw);
+      aspect-ratio: 16/9;
+      border: none;
+    }
+
+    .modal-bar {
+      padding: 10px 14px;
+      background: #161616;
+      border-top: 1px solid #252525;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-label {
+      font-size: 11px;
+      font-family: 'DM Mono', 'PingFang SC', monospace;
+      color: #777;
+    }
+
+    .modal-close {
+      background: none;
+      border: 1px solid #3A3A3A;
+      color: #777;
+      font-size: 13px;
+      width: 26px; height: 26px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.15s, border-color 0.15s;
+      font-family: sans-serif;
+    }
+    .modal-close:hover { color: #FFF; border-color: #888; }
+  </style>
 </head>
 <body>
-    <!-- Falling Pixels Container -->
-    <div class="falling-pixels" id="fallingPixels"></div>
-    
-    <!-- Desktop Background -->
-    <div class="desktop">
-        
-        <!-- Taskbar -->
-        <div class="taskbar">
-            <div class="start-btn">
-                <span class="logo">🪟</span>
-                <span>Start</span>
-            </div>
-            <div class="taskbar-items">
-                <div class="task-item active">rinko's space</div>
-            </div>
-            <div class="clock" id="clock">00:00 PM</div>
-        </div>
 
-        <!-- Main Window -->
-        <div class="window active-window" id="main-window">
-            <div class="title-bar">
-                <div class="title-bar-text">
-                    <span class="icon">🏠</span>
-                    rinko's online living space
-                </div>
-                <div class="title-bar-controls">
-                    <button class="btn-minimize">_</button>
-                    <button class="btn-maximize">□</button>
-                    <button class="btn-close">×</button>
-                </div>
-            </div>
-            
-            <div class="window-body">
-                <!-- Navigation Menu -->
-                <div class="menu-bar">
-                    <span class="menu-item active" onclick="showPage('home')">🏠 Home</span>
-                    <span class="menu-item" onclick="showPage('works')">📁 Works</span>
-                    <span class="menu-item" onclick="showPage('contact')">📧 Contact</span>
-                </div>
+<!-- ── Big editorial text ── -->
+<div class="bg-text">AI<br>SHOWCASE</div>
 
-                <!-- Content Area -->
-                <div class="content">
-                    
-                    <!-- HOME PAGE -->
-                    <div id="home" class="page active">
-                        <div class="welcome-header">
-                            <div class="avatar-placeholder">
-                                <span>📸</span>
-                            </div>
-                            <h1>hi, i'm rinko 🌿</h1>
-                            <p class="tagline">photographer | plant lover | creative soul</p>
-                        </div>
-                        
-                        <div class="pixel-divider"></div>
-                        
-                        <div class="intro-text">
-                            <p>welcome to my digital corner — a space where i share my lens on the world.</p>
-                            <p>based in shanghai, i chase light through streets and leaves, capturing moments that whisper rather than shout.</p>
-                            <p>this site is built with love and a touch of y2k nostalgia ✨</p>
-                        </div>
-                        
-                        <div class="quick-links">
-                            <div class="link-card" onclick="showPage('works')">
-                                <span class="link-icon">📷</span>
-                                <span>view my works</span>
-                            </div>
-                            <div class="link-card" onclick="showPage('contact')">
-                                <span class="link-icon">💌</span>
-                                <span>say hello</span>
-                            </div>
-                        </div>
-                        
-                        <div class="status-bar">
-                            <span class="status-light green"></span>
-                            <span>currently: chasing golden hour</span>
-                        </div>
-                    </div>
+<!-- ── Divider ── -->
+<div class="rule"></div>
+<div class="meta">2026·wenghao·portfolio</div>
 
-                    <!-- WORKS PAGE -->
-                    <div id="works" class="page">
-                        <h2>📁 my works</h2>
-                        <p class="section-desc">a collection of moments frozen in time</p>
-                        
-                        <div class="filter-bar">
-                            <button class="filter-btn active" onclick="filterWorks('all')">all</button>
-                            <button class="filter-btn" onclick="filterWorks('photo')">photography</button>
-                            <button class="filter-btn" onclick="filterWorks('video')">video</button>
-                        </div>
-                        
-                        <div class="works-grid">
-                            <!-- Example Work Item - Replace with your own -->
-                            <div class="work-item" data-category="photo">
-                                <div class="work-thumb">
-                                    <div class="thumb-placeholder">
-                                        <span>🖼️</span>
-                                        <p>your photo here</p>
-                                    </div>
-                                    <div class="work-overlay">
-                                        <span class="view-icon">👁️</span>
-                                    </div>
-                                </div>
-                                <div class="work-info">
-                                    <h4>golden hour streets</h4>
-                                    <p class="work-meta">shanghai, 2024 | fujifilm x-t5</p>
-                                </div>
-                            </div>
-                            
-                            <div class="work-item" data-category="photo">
-                                <div class="work-thumb">
-                                    <div class="thumb-placeholder">
-                                        <span>🌿</span>
-                                        <p>your photo here</p>
-                                    </div>
-                                    <div class="work-overlay">
-                                        <span class="view-icon">👁️</span>
-                                    </div>
-                                </div>
-                                <div class="work-info">
-                                    <h4>botanical whispers</h4>
-                                    <p class="work-meta">home studio | vintage casio</p>
-                                </div>
-                            </div>
-                            
-                            <div class="work-item" data-category="video">
-                                <div class="work-thumb">
-                                    <div class="thumb-placeholder video">
-                                        <span>▶️</span>
-                                        <p>your video here</p>
-                                    </div>
-                                    <div class="work-overlay">
-                                        <span class="view-icon">▶️</span>
-                                    </div>
-                                </div>
-                                <div class="work-info">
-                                    <h4>moments in motion</h4>
-                                    <p class="work-meta">2024 | shanghai streets</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Add more work items following this pattern -->
-                        </div>
-                        
-                        <div class="add-more-hint">
-                            <p>💡 tip: edit <code>works</code> section in index.html to add your real photos and videos</p>
-                        </div>
-                    </div>
+<!-- ────────────────────────────────────────
+     FOLDERS
+     data-vimeo: Vimeo 视频ID，留空 = coming soon
+     data-label: 显示在 modal 顶部的名称
+     style: left/right/top 调整位置，transform rotate 调整倾斜
+─────────────────────────────────────────── -->
 
-                    <!-- CONTACT PAGE -->
-                    <div id="contact" class="page">
-                        <h2>📧 get in touch</h2>
-                        <p class="section-desc">let's create something together</p>
-                        
-                        <div class="contact-grid">
-                            <a href="https://www.tiktok.com/@rinko709" target="_blank" class="contact-card-link">
-                                <div class="contact-card">
-                                    <div class="contact-icon">🎵</div>
-                                    <h4>tiktok</h4>
-                                    <p>@rinko709</p>
-                                    <span class="contact-note">short videos & moments</span>
-                                </div>
-                            </a>
-                            
-                            <a href="https://www.xiaohongshu.com/user/profile/684f096a000000001b01a34f?xsec_token=ABoSlPkDsqR8d92CCCt06VXPhYUyjq5VTChxLpnSXfT2g%3D&xsec_source=pc_search" target="_blank" class="contact-card-link">
-                                <div class="contact-card">
-                                    <div class="contact-icon">📕</div>
-                                    <h4>小红书</h4>
-                                    <p>rinko's notes</p>
-                                    <span class="contact-note">lifestyle & photo shares</span>
-                                </div>
-                            </a>
-                            
-                            <a href="mailto:rinkoweng99@gmail.com" class="contact-card-link">
-                                <div class="contact-card">
-                                    <div class="contact-icon">📧</div>
-                                    <h4>email</h4>
-                                    <p>rinkoweng99@gmail.com</p>
-                                    <span class="contact-note">for project inquiries</span>
-                                </div>
-                            </a>
-                        </div>
-                        
-                        <div class="pixel-divider"></div>
-                        
-                        <div class="message-form">
-                            <h3>📨 send a message</h3>
-                            <div class="form-fields">
-                                <div class="form-row">
-                                    <label>name:</label>
-                                    <input type="text" class="retro-input" placeholder="your name">
-                                </div>
-                                <div class="form-row">
-                                    <label>email:</label>
-                                    <input type="text" class="retro-input" placeholder="your@email.com">
-                                </div>
-                                <div class="form-row">
-                                    <label>message:</label>
-                                    <textarea class="retro-textarea" rows="4" placeholder="type your message here..."></textarea>
-                                </div>
-                            </div>
-                            <button class="retro-button" onclick="alert('message sent! (demo only)')">
-                                <span>📤</span> send message
-                            </button>
-                        </div>
-                        
-                        <div class="status-bar footer-status">
-                            <span class="status-light green"></span>
-                            <span>status: online and ready to create</span>
-                        </div>
-                    </div>
+<!-- Folder: ai-tvc (右上，蓝色选中) -->
+<div class="folder clickable"
+     style="right: 8%; top: 22%; transform: rotate(3.4deg);"
+     data-vimeo="1202148449"
+     data-label="ai-tvc">
+  <svg class="fsvg" width="clamp(90px,9vw,136px)" height="clamp(72px,7.2vw,109px)"
+       style="width:clamp(90px,9vw,136px);height:auto;"
+       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+    <defs>
+      <linearGradient id="g-atvc" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+      </linearGradient>
+      <linearGradient id="sh-atvc" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="drop-atvc">
+        <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1244A6" flood-opacity="0.22"/>
+      </filter>
+    </defs>
+    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g-atvc)" filter="url(#drop-atvc)"/>
+    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh-atvc)"/>
+  </svg>
+  <span class="flabel sel">ai-tvc</span>
+</div>
 
-                </div>
-            </div>
-        </div>
+<!-- Folder: 制片作品-ai预告片 (中央大) -->
+<div class="folder clickable"
+     style="left: 35%; top: 42%; transform: rotate(-2.2deg);"
+     data-vimeo=""
+     data-label="制片作品-ai预告片">
+  <svg class="fsvg"
+       style="width:clamp(160px,18vw,268px);height:auto;"
+       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+    <defs>
+      <linearGradient id="g-zp" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+      </linearGradient>
+      <linearGradient id="sh-zp" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="drop-zp">
+        <feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#1244A6" flood-opacity="0.28"/>
+      </filter>
+    </defs>
+    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g-zp)" filter="url(#drop-zp)"/>
+    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh-zp)"/>
+  </svg>
+  <span class="flabel">制片作品-ai预告片</span>
+</div>
 
-        <!-- Desktop Icons -->
-        <div class="desktop-icons">
-            <div class="desktop-icon" onclick="showPage('home')">
-                <div class="icon-img">🏠</div>
-                <div class="icon-label">home.exe</div>
-            </div>
-            <div class="desktop-icon" onclick="showPage('works')">
-                <div class="icon-img">📁</div>
-                <div class="icon-label">works.exe</div>
-            </div>
-            <div class="desktop-icon" onclick="showPage('contact')">
-                <div class="icon-img">📧</div>
-                <div class="icon-label">contact.exe</div>
-            </div>
-            <div class="desktop-icon">
-                <div class="icon-img">🌿</div>
-                <div class="icon-label">plants.exe</div>
-            </div>
-        </div>
+<!-- Folder: 一键生成短剧 (左中) -->
+<div class="folder clickable"
+     style="left: 6%; top: 47%; transform: rotate(1.6deg);"
+     data-vimeo=""
+     data-label="一键生成短剧">
+  <svg class="fsvg"
+       style="width:clamp(110px,13vw,184px);height:auto;"
+       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+    <defs>
+      <linearGradient id="g-yj" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+      </linearGradient>
+      <linearGradient id="sh-yj" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="drop-yj">
+        <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#1244A6" flood-opacity="0.22"/>
+      </filter>
+    </defs>
+    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g-yj)" filter="url(#drop-yj)"/>
+    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh-yj)"/>
+  </svg>
+  <span class="flabel">一键生成短剧</span>
+</div>
+
+<!-- Folder: ai jazz (右下小) -->
+<div class="folder clickable"
+     style="right: 7%; top: 58%; transform: rotate(-1.8deg);"
+     data-vimeo=""
+     data-label="ai jazz">
+  <svg class="fsvg"
+       style="width:clamp(70px,7.5vw,100px);height:auto;"
+       viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+    <defs>
+      <linearGradient id="g-aj" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#78CEFF"/><stop offset="100%" stop-color="#1B6ED4"/>
+      </linearGradient>
+      <linearGradient id="sh-aj" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity="0.36"/>
+        <stop offset="52%" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="drop-aj">
+        <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1244A6" flood-opacity="0.2"/>
+      </filter>
+    </defs>
+    <path d="M4,31 L4,21 Q4,13 13,13 L52,13 Q62,13 67,22 L71,31 Z" fill="#62BDFD"/>
+    <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g-aj)" filter="url(#drop-aj)"/>
+    <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh-aj)"/>
+  </svg>
+  <span class="flabel">ai jazz</span>
+</div>
+
+<!-- ── Cursor decoration ── -->
+<div class="cursor" style="left: 55%; top: 54%;">
+  <svg width="28" height="32" viewBox="0 0 14 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+    <path d="M2,1 L2,13 L5,10 L7,15 L9,14 L7,9 L11,9 Z"
+          fill="#1A1714" stroke="#ECEBE3" stroke-width="1.3"
+          stroke-linejoin="round" paint-order="stroke fill"/>
+  </svg>
+</div>
+
+<!-- ── Byline ── -->
+<div class="byline">rinko_wen</div>
+
+<!-- ── Modal ── -->
+<div class="modal" id="modal">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-bar">
+      <span class="modal-label" id="modalLabel"></span>
+      <button class="modal-close" id="modalClose">✕</button>
     </div>
+  </div>
+</div>
 
-    <script src="script.js"></script>
+<script>
+  const modal      = document.getElementById('modal');
+  const modalBox   = document.getElementById('modalBox');
+  const modalLabel = document.getElementById('modalLabel');
+  const modalClose = document.getElementById('modalClose');
+  const modalBar   = modalBox.querySelector('.modal-bar');
+  let activeFrame  = null;
+
+  document.querySelectorAll('.folder.clickable').forEach(folder => {
+    folder.addEventListener('click', () => {
+      const vimeoId = folder.dataset.vimeo;
+      const label   = folder.dataset.label;
+
+      if (!vimeoId) {
+        // No video yet — show coming soon
+        if (activeFrame) { activeFrame.remove(); activeFrame = null; }
+        const msg = document.createElement('div');
+        msg.style.cssText = `
+          width: min(540px, 86vw);
+          aspect-ratio: 16/9;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background: #111;
+          color: #555;
+          font-family: 'DM Mono', 'PingFang SC', monospace;
+          font-size: 13px;
+          letter-spacing: 0.06em;
+          gap: 10px;
+        `;
+        msg.innerHTML = `<span style="font-size:28px;opacity:0.3">📁</span><span>coming soon</span>`;
+        modalBox.insertBefore(msg, modalBar);
+        activeFrame = msg;
+        modalLabel.textContent = label;
+        modal.classList.add('open');
+        return;
+      }
+
+      if (activeFrame) activeFrame.remove();
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0&color=ffffff`;
+      iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+      iframe.allowFullscreen = true;
+      modalBox.insertBefore(iframe, modalBar);
+      activeFrame = iframe;
+      modalLabel.textContent = label;
+      modal.classList.add('open');
+    });
+  });
+
+  function closeModal() {
+    modal.classList.remove('open');
+    if (activeFrame) {
+      if (activeFrame.tagName === 'IFRAME') activeFrame.src = '';
+      activeFrame.remove();
+      activeFrame = null;
+    }
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
 </body>
 </html>
