@@ -194,49 +194,141 @@
     }
     .modal-close:hover { color: #FFF; border-color: #888; }
 
-    /* ── Audio Modal ── */
-    .audio-panel {
-      width: min(380px, 88vw);
-      padding: 32px 28px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
+    /* ── Jazz Player ── */
+    .modal-box.jazz-mode {
+      overflow: visible;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+    .modal-box.jazz-mode .modal-bar {
+      background: #0E0E0E;
+      border: 1px solid #2A2A2A;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      margin-top: -1px;
     }
 
-    .audio-waveform {
+    .jazz-outer {
+      position: relative;
+      padding-top: 54px;
       display: flex;
-      align-items: flex-end;
-      gap: 3px;
-      height: 32px;
+      align-items: center;
     }
 
-    .audio-waveform span {
-      display: block;
-      width: 3px;
+    .jazz-vinyl-pos {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+    }
+
+    .jazz-vinyl {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%,
+        #A8A8A8 0%, #888 6%, #222 6%, #111 11%,
+        #1d1d1d 14%, #111 18%, #1d1d1d 22%, #111 26%,
+        #1d1d1d 30%, #111 34%, #1d1d1d 38%, #111 42%,
+        #1d1d1d 46%, #111 50%, #1d1d1d 54%, #111 58%,
+        #1d1d1d 62%, #111 66%, #1d1d1d 70%, #111 100%
+      );
+      box-shadow: 0 8px 36px rgba(0,0,0,0.85), 0 2px 6px rgba(0,0,0,0.5);
+      animation: vinylSpin 5s linear infinite;
+    }
+
+    .jazz-art {
+      width: 80px;
+      min-height: 148px;
+      border-radius: 16px;
+      background: linear-gradient(160deg, #0a1628 0%, #0e2a5e 45%, #3576E6 100%);
+      flex-shrink: 0;
+      margin-right: -10px;
+      position: relative;
+      z-index: 1;
+      box-shadow: -5px 8px 24px rgba(0,0,0,0.7);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.18);
+      font-size: 30px;
+    }
+
+    .jazz-card {
+      background: linear-gradient(150deg, #3C3C3E 0%, #2A2A2C 100%);
+      border-radius: 20px;
+      padding: 20px 22px 18px;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.07);
+      width: min(340px, 78vw);
+      flex-shrink: 0;
+    }
+
+    .jazz-knob-wrap {
+      display: flex; align-items: center;
+      margin-left: -8px;
+      flex-shrink: 0;
+      position: relative; z-index: 1;
+    }
+    .jazz-knob {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 32%, #606060, #1e1e1e);
+      border: 2px solid #3a3a3a;
+      box-shadow: 4px 4px 14px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06);
+      position: relative;
+    }
+    .jazz-knob::after {
+      content: '';
+      position: absolute;
+      width: 3px; height: 13px;
+      background: rgba(255,255,255,0.55);
       border-radius: 2px;
-      background: #3576E6;
-      transform-origin: bottom;
-      animation: waveBar 1s ease-in-out infinite alternate;
+      top: 7px; left: 50%;
+      transform: translateX(-50%);
     }
 
-    .audio-info { display: flex; flex-direction: column; gap: 4px; }
+    .jazz-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+    .jazz-title { color: #FFF; font-family: 'DM Mono', monospace; font-size: 18px; letter-spacing: 0.02em; }
+    .jazz-artist { color: #8E8E93; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.06em; margin-top: 5px; }
+    .jazz-note { font-size: 18px; opacity: 0.3; margin-top: 2px; }
 
-    .audio-title {
-      font-family: 'DM Mono', monospace;
-      font-size: 16px;
-      color: #EEEAE2;
-      letter-spacing: 0.05em;
+    .jazz-prog { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; }
+    .jazz-t { color: #636366; font-family: 'DM Mono', monospace; font-size: 10px; flex-shrink: 0; }
+    .jazz-track {
+      flex: 1; height: 3px; background: #48484A; border-radius: 2px; position: relative;
+    }
+    .jazz-fill {
+      height: 100%; width: 0%; background: #FFF; border-radius: 2px;
+      animation: jazzProg 240s linear forwards;
+      position: relative;
+    }
+    .jazz-dot {
+      position: absolute; right: -5px; top: 50%;
+      transform: translateY(-50%);
+      width: 11px; height: 11px; border-radius: 50%; background: #FFF;
+      box-shadow: 0 0 5px rgba(255,255,255,0.35);
     }
 
-    .audio-sub {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: #444;
-      letter-spacing: 0.08em;
+    .jazz-ctrl { display: flex; align-items: center; justify-content: space-between; }
+    .jbtn {
+      background: none; border: none; cursor: pointer;
+      color: #8E8E93; padding: 4px;
+      transition: color 0.15s;
+      display: flex; align-items: center; justify-content: center;
     }
+    .jbtn:hover { color: #FFF; }
+    .jbtn.jplay {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #FFF; color: #111;
+      box-shadow: 0 2px 14px rgba(255,255,255,0.18);
+    }
+    .jbtn.jplay:hover { background: #E0E0E0; color: #111; }
 
-    .audio-embed { line-height: 0; }
-    .audio-embed iframe { border-radius: 0 0 4px 4px; }
+    .jazz-iframe {
+      position: absolute; width: 1px; height: 1px;
+      opacity: 0.01; pointer-events: none; top: 0; left: 0;
+    }
 
     /* ── Top CLI bar ── */
     .topbar {
@@ -336,9 +428,13 @@
     @keyframes fadeIn {
       from { opacity: 0; } to { opacity: 1; }
     }
-    @keyframes waveBar {
-      from { opacity: 0.25; transform: scaleY(0.2); }
-      to   { opacity: 1;    transform: scaleY(1);   }
+    @keyframes vinylSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes jazzProg {
+      from { width: 0%; }
+      to   { width: 100%; }
     }
     @keyframes blink {
       0%, 100% { opacity: 1; }
@@ -372,8 +468,8 @@
 <div class="rule"></div>
 <div class="meta">2026·wenghao·portfolio</div>
 
-<!-- ── ai-tvc: 右侧，规则线附近，向右微倾 ── -->
-<div class="fw" style="right:3%; top:44%; transform:rotate(3.4deg);">
+<!-- ── ai-tvc: 字母A正下方 ── -->
+<div class="fw" style="left:58%; top:40%; transform:rotate(3.4deg);">
   <div class="folder" style="animation-delay:0.05s;"
        data-type="vimeo" data-vimeo="1202148449" data-label="ai-tvc">
     <svg class="fsvg" style="width:clamp(90px,9vw,136px);height:auto;"
@@ -537,22 +633,50 @@
 
       if (type === 'audio') {
         const id = folder.dataset.netease;
-        const panel = document.createElement('div');
-        panel.className = 'audio-panel';
-        panel.appendChild(makeWaveform());
-        panel.innerHTML += `
-          <div class="audio-info">
-            <div class="audio-title">${label}</div>
-            <div class="audio-sub">wenghao · 2026</div>
+        modalBox.classList.add('jazz-mode');
+        const outer = document.createElement('div');
+        outer.className = 'jazz-outer';
+        outer.innerHTML = `
+          <div class="jazz-vinyl-pos"><div class="jazz-vinyl"></div></div>
+          <div class="jazz-art">♪</div>
+          <div class="jazz-card">
+            <div class="jazz-top">
+              <div>
+                <div class="jazz-title">ai jazz</div>
+                <div class="jazz-artist">wenghao · 2026</div>
+              </div>
+              <div class="jazz-note">♫</div>
+            </div>
+            <div class="jazz-prog">
+              <span class="jazz-t">0:00</span>
+              <div class="jazz-track">
+                <div class="jazz-fill"><div class="jazz-dot"></div></div>
+              </div>
+              <span class="jazz-t">4:00</span>
+            </div>
+            <div class="jazz-ctrl">
+              <button class="jbtn" title="shuffle">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+              </button>
+              <button class="jbtn" title="prev">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4"/><rect x="5" y="4" width="2" height="16"/></svg>
+              </button>
+              <button class="jbtn jplay" title="play">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21"/></svg>
+              </button>
+              <button class="jbtn" title="next">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20"/><rect x="17" y="4" width="2" height="16"/></svg>
+              </button>
+              <button class="jbtn" title="repeat">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              </button>
+            </div>
+            <iframe class="jazz-iframe" frameborder="no"
+                    src="//music.163.com/outchain/player?type=2&id=${id}&auto=1&height=66"></iframe>
           </div>
-          <div class="audio-embed">
-            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0"
-                    width="100%" height="86"
-                    src="//music.163.com/outchain/player?type=2&id=${id}&auto=1&height=66">
-            </iframe>
-          </div>`;
-        modalBox.insertBefore(panel, modalBar);
-        activeEl = panel;
+          <div class="jazz-knob-wrap"><div class="jazz-knob"></div></div>`;
+        modalBox.insertBefore(outer, modalBar);
+        activeEl = outer;
 
       } else if (type === 'vimeo') {
         const id = folder.dataset.vimeo;
@@ -593,7 +717,10 @@
 
   const closeModal = () => {
     modal.classList.remove('open');
+    modalBox.classList.remove('jazz-mode');
     if (activeEl) {
+      const iframe = activeEl.querySelector ? activeEl.querySelector('iframe') : null;
+      if (iframe) iframe.src = '';
       if (activeEl.tagName === 'IFRAME') activeEl.src = '';
       activeEl.remove(); activeEl = null;
     }
