@@ -326,8 +326,14 @@
     .jbtn.jplay:hover { background: #E0E0E0; color: #111; }
 
     .jazz-iframe {
-      position: absolute; width: 1px; height: 1px;
-      opacity: 0.01; pointer-events: none; top: 0; left: 0;
+      position: fixed;
+      top: -200px;
+      left: 0;
+      width: 300px;
+      height: 86px;
+      opacity: 0;
+      pointer-events: none;
+      border: none;
     }
 
     /* ── Top CLI bar ── */
@@ -468,8 +474,8 @@
 <div class="rule"></div>
 <div class="meta">2026·wenghao·portfolio</div>
 
-<!-- ── ai-tvc: 字母A正下方 ── -->
-<div class="fw" style="left:58%; top:40%; transform:rotate(3.4deg);">
+<!-- ── ai-tvc: 字母A和S之间 ── -->
+<div class="fw" style="left:63%; top:37%; transform:rotate(3.4deg);">
   <div class="folder" style="animation-delay:0.05s;"
        data-type="vimeo" data-vimeo="1202148449" data-label="ai-tvc">
     <svg class="fsvg" style="width:clamp(90px,9vw,136px);height:auto;"
@@ -541,7 +547,7 @@
 </div>
 
 <!-- ── AI Jazz: 右下，小，向左微倾 ── -->
-<div class="fw" style="right:5%; top:63%; transform:rotate(-1.8deg);">
+<div class="fw" style="right:9%; top:63%; transform:rotate(-1.8deg);">
   <div class="folder" style="animation-delay:0.44s;"
        data-type="audio" data-netease="3358142132" data-label="ai jazz">
     <svg class="fsvg" style="width:clamp(70px,7.5vw,100px);height:auto;"
