@@ -18,6 +18,22 @@
       font-family: 'DM Mono', monospace;
     }
 
+    /* ── Subtle drifting dot grid ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: -30px;
+      pointer-events: none;
+      z-index: 0;
+      background-image: radial-gradient(circle, rgba(44,42,38,0.08) 1px, transparent 1px);
+      background-size: 26px 26px;
+      animation: dotDrift 28s linear infinite;
+    }
+    @keyframes dotDrift {
+      from { background-position: 0 0; }
+      to   { background-position: 26px 26px; }
+    }
+
     /* ── Grain texture ── */
     body::after {
       content: '';
@@ -380,10 +396,10 @@
   </div>
 </div>
 
-<!-- ── 制片作品: 中央偏右，大，向左微倾 ── -->
+<!-- ── 一键生成短剧: 中央，大，向左微倾 (Bilibili) ── -->
 <div class="fw" style="left:36%; top:58%; transform:rotate(-2.2deg);">
   <div class="folder" style="animation-delay:0.18s;"
-       data-type="coming" data-label="制片作品-ai预告片">
+       data-type="bilibili" data-bvid="BV1T2Ld6VExH" data-label="一键生成短剧">
     <svg class="fsvg" style="width:clamp(160px,18vw,268px);height:auto;"
          viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
       <defs>
@@ -400,14 +416,14 @@
       <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g2)" filter="url(#d2)"/>
       <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh2)"/>
     </svg>
-    <span class="flabel">制片作品-ai预告片</span>
+    <span class="flabel">一键生成短剧</span>
   </div>
 </div>
 
-<!-- ── 一键生成短剧: 左侧，中等，向右微倾 ── -->
+<!-- ── 制片作品: 左侧，中等，向右微倾 (微信外链) ── -->
 <div class="fw" style="left:5%; top:60%; transform:rotate(1.6deg);">
   <div class="folder" style="animation-delay:0.31s;"
-       data-type="coming" data-label="一键生成短剧">
+       data-type="external" data-url="https://weixin.qq.com/sph/AepqWgkaLh" data-label="制片作品-ai预告片">
     <svg class="fsvg" style="width:clamp(110px,13vw,184px);height:auto;"
          viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
       <defs>
@@ -424,7 +440,7 @@
       <rect x="2" y="28" width="116" height="66" rx="9" fill="url(#g3)" filter="url(#d3)"/>
       <rect x="2" y="28" width="116" height="35" rx="9" fill="url(#sh3)"/>
     </svg>
-    <span class="flabel">一键生成短剧</span>
+    <span class="flabel">制片作品-ai预告片</span>
   </div>
 </div>
 
@@ -547,6 +563,20 @@
         iframe.allowFullscreen = true;
         modalBox.insertBefore(iframe, modalBar);
         activeEl = iframe;
+
+      } else if (type === 'bilibili') {
+        const bvid = folder.dataset.bvid;
+        const iframe = document.createElement('iframe');
+        iframe.className = 'vid';
+        iframe.src = `//player.bilibili.com/player.html?bvid=${bvid}&page=1&autoplay=1&danmaku=0`;
+        iframe.allow = 'autoplay; fullscreen';
+        iframe.allowFullscreen = true;
+        modalBox.insertBefore(iframe, modalBar);
+        activeEl = iframe;
+
+      } else if (type === 'external') {
+        window.open(folder.dataset.url, '_blank', 'noopener');
+        return;
 
       } else {
         const msg = document.createElement('div');
