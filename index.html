@@ -445,6 +445,77 @@
       0%, 100% { opacity: 1; }
       50%       { opacity: 0; }
     }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+
+      /* Topbar: hide long path text, keep prompt symbol */
+      .tb-path { display: none; }
+      .tb-center { min-width: 0; gap: 2px; }
+      .topbar { gap: 12px; padding: 8px 14px; top: 14px; }
+
+      /* Rule & meta shift up a bit */
+      .rule { top: 40%; }
+      .meta { top: calc(40% + 8px); font-size: 10px; }
+
+      /* Cursor decoration — hide on touch */
+      body > div:not([class]) { display: none; }
+
+      /* ── Folder positions ──
+         #5 ai-tvc | #6 一键生成短片 | #7 制片作品 | #8 ai jazz
+         Inline styles need !important to override */
+
+      /* ai-tvc: upper right */
+      body > :nth-child(5) {
+        left: 60% !important;
+        top: 28% !important;
+      }
+      body > :nth-child(5) .fsvg { width: 80px !important; }
+
+      /* 一键生成短片: center, medium size */
+      body > :nth-child(6) {
+        left: 30% !important;
+        top: 50% !important;
+      }
+      body > :nth-child(6) .fsvg { width: 130px !important; }
+
+      /* 制片作品: left side */
+      body > :nth-child(7) {
+        left: 2% !important;
+        top: 54% !important;
+      }
+      body > :nth-child(7) .fsvg { width: 104px !important; }
+
+      /* ai jazz: lower right */
+      body > :nth-child(8) {
+        right: 3% !important;
+        top: 70% !important;
+      }
+      body > :nth-child(8) .fsvg { width: 62px !important; }
+
+      /* Byline */
+      .byline { font-size: 10px; bottom: 20px; }
+
+      /* Visit btn */
+      .visit-btn { bottom: 16px; right: 16px; font-size: 10px; padding: 6px 10px 6px 9px; }
+
+      /* ── Jazz player: stack vertically ── */
+      .jazz-outer { flex-direction: column; align-items: center; padding-top: 52px; }
+      .jazz-art {
+        width: 100%;
+        min-height: 52px;
+        border-radius: 14px 14px 0 0;
+        margin-right: 0;
+        margin-bottom: -4px;
+        box-shadow: none;
+      }
+      .jazz-knob-wrap { display: none; }
+      .jazz-card { width: min(88vw, 340px); border-radius: 0 0 20px 20px; }
+      .jazz-vinyl { width: 80px; height: 80px; }
+
+      /* ── Video modal ── */
+      .modal-box iframe.vid { width: 90vw; }
+    }
   </style>
 </head>
 <body>
