@@ -705,7 +705,12 @@
     folder.addEventListener('click', () => {
       const type  = folder.dataset.type;
       const label = folder.dataset.label;
-      if (activeEl) { activeEl.remove(); activeEl = null; }
+      if (activeEl) {
+        if (activeEl.querySelectorAll) activeEl.querySelectorAll('iframe').forEach(f => { f.src = ''; });
+        if (activeEl.tagName === 'IFRAME') activeEl.src = '';
+        activeEl.remove(); activeEl = null;
+      }
+      modalBox.classList.remove('jazz-mode');
 
       if (type === 'audio') {
         const id = folder.dataset.netease;
@@ -749,7 +754,7 @@
             </div>
             <iframe class="jazz-iframe" frameborder="no" border="0"
                     marginwidth="0" marginheight="0" scrolling="no"
-                    src="//music.163.com/outchain/player?type=2&id=${id}&auto=0&height=66"></iframe>
+                    src="https://music.163.com/outchain/player?type=2&id=${id}&auto=1&height=66"></iframe>
           </div>
           <div class="jazz-knob-wrap"><div class="jazz-knob"></div></div>`;
         modalBox.insertBefore(outer, modalBar);
