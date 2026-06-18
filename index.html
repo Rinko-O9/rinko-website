@@ -137,203 +137,207 @@
       animation: fadeIn 1s ease forwards 0.7s;
     }
 
-    /* ── Video Modal ── */
+    /* ── macOS Window Modal ── */
     .modal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.84);
+      background: rgba(0,0,0,0.42);
       z-index: 1000;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     .modal.open { display: flex; }
 
     .modal-box {
-      background: #0E0E0E;
-      border-radius: 8px;
+      border-radius: 12px;
       overflow: hidden;
-      border: 1px solid #2A2A2A;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.65);
-      max-width: 90vw;
+      box-shadow: 0 0 0 0.5px rgba(0,0,0,0.22),
+                  0 26px 80px rgba(0,0,0,0.5),
+                  0 4px 12px rgba(0,0,0,0.2);
+      max-width: 92vw;
     }
 
-    .modal-box iframe.vid {
+    /* Title bar */
+    .mac-bar {
+      height: 40px;
+      background: linear-gradient(180deg, #E2E2E2 0%, #D0D0D0 100%);
+      border-bottom: 1px solid #B8B8B8;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 8px;
+      user-select: none;
+      position: relative;
+    }
+    .mac-dots { display: flex; gap: 7px; flex-shrink: 0; }
+    .mac-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 0.5px solid rgba(0,0,0,0.14);
+    }
+    .mac-dot.red   { background: #FF5F57; cursor: pointer; }
+    .mac-dot.amber { background: #FFBD2E; }
+    .mac-dot.green { background: #28C840; }
+    .mac-dot.red:hover { background: #E04040; }
+
+    .mac-nav { display: flex; gap: 1px; flex-shrink: 0; }
+    .mac-navbtn {
+      font-size: 15px; color: #999; line-height: 1;
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .mac-wintitle {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+      font-size: 13px; font-weight: 600; color: #2A2A2A;
+      white-space: nowrap; pointer-events: none;
+    }
+
+    .mac-tbright {
+      margin-left: auto;
+      display: flex; gap: 9px; align-items: center;
+    }
+    .mac-tbicon { color: #888; display: flex; align-items: center; cursor: default; }
+
+    /* Location bar (Finder style) */
+    .mac-locbar {
+      height: 28px;
+      background: #EBEBEB;
+      border-bottom: 1px solid #D4D4D4;
+      display: flex; align-items: center;
+      padding: 0 12px; gap: 3px;
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+      font-size: 11px; color: #555;
+    }
+    .mac-loc-seg { color: #444; }
+    .mac-loc-arrow { color: #AAA; font-size: 10px; }
+    .mac-loc-current { color: #1A1A1A; font-weight: 500; }
+    .mac-loc-plus {
+      margin-left: auto; background: none; border: none;
+      color: #999; font-size: 16px; cursor: default; line-height: 1;
+      font-weight: 300;
+    }
+
+    /* Content area */
+    .mac-body { background: #FFFFFF; }
+
+    /* Status bar */
+    .mac-statusbar {
+      height: 22px;
+      background: #EBEBEB;
+      border-top: 1px solid #D4D4D4;
+      display: flex; align-items: center;
+      padding: 0 10px;
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+      font-size: 11px; color: #888;
+    }
+
+    /* ── Video (Vimeo / Bilibili) ── */
+    iframe.mac-vid {
       display: block;
-      width: min(900px, 86vw);
+      width: min(860px, 86vw);
       aspect-ratio: 16/9;
       border: none;
     }
 
-    .modal-bar {
-      padding: 10px 14px;
-      background: #161616;
-      border-top: 1px solid #252525;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* ── Audio (Tiny Player style) ── */
+    .mac-audio {
+      width: min(400px, 88vw);
+      background: #F6F6F6;
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
     }
-
-    .modal-label {
-      font-size: 11px;
-      font-family: 'DM Mono', 'PingFang SC', monospace;
-      color: #777;
+    .mac-audio-info {
+      text-align: center;
+      padding: 20px 24px 14px;
+      border-bottom: 1px solid #E8E8E8;
     }
+    .mac-audio-song  { font-size: 15px; font-weight: 700; color: #1C1C1C; margin-bottom: 5px; }
+    .mac-audio-artist{ font-size: 12px; color: #888; }
 
-    .modal-close {
-      background: none;
-      border: 1px solid #3A3A3A;
-      color: #777;
-      font-size: 13px;
-      width: 26px; height: 26px;
-      border-radius: 4px;
-      cursor: pointer;
+    .mac-audio-ctrl {
       display: flex; align-items: center; justify-content: center;
-      transition: color 0.15s, border-color 0.15s;
+      gap: 28px; padding: 18px 0 10px;
     }
-    .modal-close:hover { color: #FFF; border-color: #888; }
-
-    /* ── Jazz Player ── */
-    .modal-box.jazz-mode {
-      overflow: visible;
-      background: transparent;
-      border: none;
-      box-shadow: none;
-    }
-    .modal-box.jazz-mode .modal-bar {
-      background: #0E0E0E;
-      border: 1px solid #2A2A2A;
-      border-top: none;
-      border-radius: 0 0 10px 10px;
-      margin-top: -1px;
-    }
-
-    .jazz-outer {
-      position: relative;
-      padding-top: 54px;
-      display: flex;
-      align-items: center;
-    }
-
-    .jazz-vinyl-pos {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 5;
-    }
-
-    .jazz-vinyl {
-      width: 96px; height: 96px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 50% 50%,
-        #A8A8A8 0%, #888 6%, #222 6%, #111 11%,
-        #1d1d1d 14%, #111 18%, #1d1d1d 22%, #111 26%,
-        #1d1d1d 30%, #111 34%, #1d1d1d 38%, #111 42%,
-        #1d1d1d 46%, #111 50%, #1d1d1d 54%, #111 58%,
-        #1d1d1d 62%, #111 66%, #1d1d1d 70%, #111 100%
-      );
-      box-shadow: 0 8px 36px rgba(0,0,0,0.85), 0 2px 6px rgba(0,0,0,0.5);
-      animation: vinylSpin 5s linear infinite;
-    }
-
-    .jazz-art {
-      width: 80px;
-      min-height: 148px;
-      border-radius: 16px;
-      background: linear-gradient(160deg, #0a1628 0%, #0e2a5e 45%, #3576E6 100%);
-      flex-shrink: 0;
-      margin-right: -10px;
-      position: relative;
-      z-index: 1;
-      box-shadow: -5px 8px 24px rgba(0,0,0,0.7);
-      display: flex; align-items: center; justify-content: center;
-      color: rgba(255,255,255,0.18);
-      font-size: 30px;
-    }
-
-    .jazz-card {
-      background: linear-gradient(150deg, #3C3C3E 0%, #2A2A2C 100%);
-      border-radius: 20px;
-      padding: 20px 22px 18px;
-      position: relative;
-      z-index: 2;
-      box-shadow: 0 24px 70px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.07);
-      width: min(340px, 78vw);
-      flex-shrink: 0;
-    }
-
-    .jazz-knob-wrap {
-      display: flex; align-items: center;
-      margin-left: -8px;
-      flex-shrink: 0;
-      position: relative; z-index: 1;
-    }
-    .jazz-knob {
-      width: 54px; height: 54px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 38% 32%, #606060, #1e1e1e);
-      border: 2px solid #3a3a3a;
-      box-shadow: 4px 4px 14px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06);
-      position: relative;
-    }
-    .jazz-knob::after {
-      content: '';
-      position: absolute;
-      width: 3px; height: 13px;
-      background: rgba(255,255,255,0.55);
-      border-radius: 2px;
-      top: 7px; left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .jazz-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
-    .jazz-title { color: #FFF; font-family: 'DM Mono', monospace; font-size: 18px; letter-spacing: 0.02em; }
-    .jazz-artist { color: #8E8E93; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.06em; margin-top: 5px; }
-    .jazz-note { font-size: 18px; opacity: 0.3; margin-top: 2px; }
-
-    .jazz-prog { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; }
-    .jazz-t { color: #636366; font-family: 'DM Mono', monospace; font-size: 10px; flex-shrink: 0; }
-    .jazz-track {
-      flex: 1; height: 3px; background: #48484A; border-radius: 2px; position: relative;
-    }
-    .jazz-fill {
-      height: 100%; width: 0%; background: #FFF; border-radius: 2px;
-      animation: jazzProg 240s linear forwards;
-      position: relative;
-    }
-    .jazz-dot {
-      position: absolute; right: -5px; top: 50%;
-      transform: translateY(-50%);
-      width: 11px; height: 11px; border-radius: 50%; background: #FFF;
-      box-shadow: 0 0 5px rgba(255,255,255,0.35);
-    }
-
-    .jazz-ctrl { display: flex; align-items: center; justify-content: space-between; }
-    .jbtn {
+    .mac-ctrlbtn {
       background: none; border: none; cursor: pointer;
-      color: #8E8E93; padding: 4px;
-      transition: color 0.15s;
-      display: flex; align-items: center; justify-content: center;
+      color: #1C1C1C; display: flex; align-items: center;
+      transition: opacity 0.15s;
     }
-    .jbtn:hover { color: #FFF; }
-    .jbtn.jplay {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: #FFF; color: #111;
-      box-shadow: 0 2px 14px rgba(255,255,255,0.18);
-    }
-    .jbtn.jplay:hover { background: #E0E0E0; color: #111; }
+    .mac-ctrlbtn:hover { opacity: 0.5; }
 
-    .jazz-iframe {
-      display: block;
-      width: 100%;
-      height: 66px;
-      border: none;
-      margin-top: 14px;
-      border-radius: 8px;
-      overflow: hidden;
+    .mac-prog {
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 20px 18px;
     }
+    .mac-prog-time {
+      font-size: 11px; color: #888; flex-shrink: 0;
+      width: 30px; font-variant-numeric: tabular-nums;
+    }
+    .mac-prog-time:last-child { text-align: right; }
+    .mac-prog-track {
+      flex: 1; height: 4px; background: #DCDCDC;
+      border-radius: 2px; position: relative;
+    }
+    .mac-prog-fill {
+      height: 100%; width: 0%; background: #3478F6;
+      border-radius: 2px; position: relative;
+      animation: macProg 240s linear forwards;
+    }
+    .mac-prog-dot {
+      position: absolute; right: -6px; top: 50%;
+      transform: translateY(-50%);
+      width: 12px; height: 12px; background: #FFF;
+      border-radius: 50%;
+      border: 1.5px solid #C8C8C8;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .mac-netease-wrap {
+      border-top: 1px solid #E8E8E8;
+    }
+    .mac-netease-wrap iframe {
+      display: block; width: 100%; height: 66px; border: none;
+    }
+
+    /* ── External link ── */
+    .mac-external {
+      width: min(380px, 88vw);
+      padding: 44px 24px 36px;
+      background: #F6F6F6;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 10px;
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+    }
+    .mac-ext-icon { font-size: 72px; line-height: 1; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.12)); }
+    .mac-ext-name { font-size: 14px; font-weight: 600; color: #1C1C1C; text-align: center; }
+    .mac-ext-sub  { font-size: 12px; color: #999; }
+    .mac-ext-btn {
+      margin-top: 10px;
+      padding: 7px 22px;
+      background: #3478F6;
+      color: #FFF; border: none;
+      border-radius: 6px;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px; font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(52,120,246,0.35);
+    }
+    .mac-ext-btn:hover { background: #2560D0; }
+
+    /* ── Coming soon ── */
+    .mac-empty {
+      width: min(380px, 88vw);
+      padding: 60px 24px;
+      background: #F6F6F6;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 10px;
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+    }
+    .mac-empty-icon { font-size: 60px; opacity: 0.28; }
+    .mac-empty-msg  { font-size: 13px; color: #AAA; }
 
     /* ── Top CLI bar ── */
     .topbar {
@@ -433,11 +437,7 @@
     @keyframes fadeIn {
       from { opacity: 0; } to { opacity: 1; }
     }
-    @keyframes vinylSpin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    @keyframes jazzProg {
+    @keyframes macProg {
       from { width: 0%; }
       to   { width: 100%; }
     }
@@ -660,13 +660,43 @@
   visit site
 </a>
 
-<!-- ── Modal ── -->
+<!-- ── macOS Window Modal ── -->
 <div class="modal" id="modal">
   <div class="modal-box" id="modalBox">
-    <div class="modal-bar">
-      <span class="modal-label" id="modalLabel"></span>
-      <button class="modal-close" id="modalClose">✕</button>
+    <!-- Title bar -->
+    <div class="mac-bar">
+      <div class="mac-dots">
+        <div class="mac-dot red"   id="modalClose"></div>
+        <div class="mac-dot amber"></div>
+        <div class="mac-dot green"></div>
+      </div>
+      <div class="mac-nav">
+        <span class="mac-navbtn">‹</span>
+        <span class="mac-navbtn">›</span>
+      </div>
+      <span class="mac-wintitle" id="modalLabel">ai-showcase</span>
+      <div class="mac-tbright">
+        <span class="mac-tbicon">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.1"><rect x="0.5" y="0.5" width="5" height="5" rx="1"/><rect x="7.5" y="0.5" width="5" height="5" rx="1"/><rect x="0.5" y="7.5" width="5" height="5" rx="1"/><rect x="7.5" y="7.5" width="5" height="5" rx="1"/></svg>
+        </span>
+        <span class="mac-tbicon">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.1"><circle cx="5.5" cy="5.5" r="4.5"/><line x1="9" y1="9" x2="12.5" y2="12.5"/></svg>
+        </span>
+      </div>
     </div>
+    <!-- Location bar -->
+    <div class="mac-locbar">
+      <span class="mac-loc-seg">wenghao</span>
+      <span class="mac-loc-arrow">›</span>
+      <span class="mac-loc-seg">ai-showcase</span>
+      <span class="mac-loc-arrow">›</span>
+      <span class="mac-loc-current" id="macLocCurrent">—</span>
+      <button class="mac-loc-plus">+</button>
+    </div>
+    <!-- Dynamic content -->
+    <div class="mac-body" id="macContent"></div>
+    <!-- Status bar -->
+    <div class="mac-statusbar" id="macStatus">ai showcase · wenghao · 2026</div>
   </div>
 </div>
 
@@ -680,131 +710,116 @@
   });
 
   /* ── Modal logic ── */
-  const modal      = document.getElementById('modal');
-  const modalBox   = document.getElementById('modalBox');
+  const modal    = document.getElementById('modal');
+  const modalBox = document.getElementById('modalBox');
+  const macContent = document.getElementById('macContent');
+  const macStatus  = document.getElementById('macStatus');
+  const macLocCurrent = document.getElementById('macLocCurrent');
   const modalLabel = document.getElementById('modalLabel');
   const modalClose = document.getElementById('modalClose');
-  const modalBar   = modalBox.querySelector('.modal-bar');
-  let activeEl     = null;
+  let activeIframes = [];
 
-  function makeWaveform() {
-    const heights = [30,55,80,45,90,60,75,40,95,65,50,85,35,70,55,80,45,60,90,40];
-    const wrap = document.createElement('div');
-    wrap.className = 'audio-waveform';
-    heights.forEach((h, i) => {
-      const bar = document.createElement('span');
-      bar.style.height = h + '%';
-      bar.style.animationDelay = (i * 0.06) + 's';
-      bar.style.animationDuration = (0.8 + (i % 4) * 0.15) + 's';
-      wrap.appendChild(bar);
-    });
-    return wrap;
+  function setMac(label, statusText) {
+    modalLabel.textContent = label;
+    macLocCurrent.textContent = label;
+    macStatus.textContent = statusText;
+  }
+
+  function clearContent() {
+    activeIframes.forEach(f => { f.src = ''; });
+    activeIframes = [];
+    macContent.innerHTML = '';
   }
 
   document.querySelectorAll('.folder').forEach(folder => {
     folder.addEventListener('click', () => {
       const type  = folder.dataset.type;
       const label = folder.dataset.label;
-      if (activeEl) {
-        if (activeEl.querySelectorAll) activeEl.querySelectorAll('iframe').forEach(f => { f.src = ''; });
-        if (activeEl.tagName === 'IFRAME') activeEl.src = '';
-        activeEl.remove(); activeEl = null;
-      }
-      modalBox.classList.remove('jazz-mode');
+      clearContent();
 
       if (type === 'audio') {
         const id = folder.dataset.netease;
-        modalBox.classList.add('jazz-mode');
-        const outer = document.createElement('div');
-        outer.className = 'jazz-outer';
-        outer.innerHTML = `
-          <div class="jazz-vinyl-pos"><div class="jazz-vinyl"></div></div>
-          <div class="jazz-art">♪</div>
-          <div class="jazz-card">
-            <div class="jazz-top">
-              <div>
-                <div class="jazz-title">ai jazz</div>
-                <div class="jazz-artist">wenghao · 2026</div>
+        setMac(label, '网易云音乐 · wenghao · 2026');
+        macContent.innerHTML = `
+          <div class="mac-audio">
+            <div class="mac-audio-info">
+              <div class="mac-audio-song">ai jazz</div>
+              <div class="mac-audio-artist">wenghao · 2026</div>
+            </div>
+            <div class="mac-audio-ctrl">
+              <button class="mac-ctrlbtn" title="prev">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4"/><rect x="5" y="4" width="2.5" height="16"/></svg>
+              </button>
+              <button class="mac-ctrlbtn" title="pause">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              </button>
+              <button class="mac-ctrlbtn" title="next">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20"/><rect x="16.5" y="4" width="2.5" height="16"/></svg>
+              </button>
+            </div>
+            <div class="mac-prog">
+              <span class="mac-prog-time">0:00</span>
+              <div class="mac-prog-track">
+                <div class="mac-prog-fill"><div class="mac-prog-dot"></div></div>
               </div>
-              <div class="jazz-note">♫</div>
+              <span class="mac-prog-time" style="text-align:right">4:00</span>
             </div>
-            <div class="jazz-prog">
-              <span class="jazz-t">0:00</span>
-              <div class="jazz-track">
-                <div class="jazz-fill"><div class="jazz-dot"></div></div>
-              </div>
-              <span class="jazz-t">4:00</span>
+            <div class="mac-netease-wrap">
+              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"
+                      src="https://music.163.com/outchain/player?type=2&id=${id}&auto=1&height=66"></iframe>
             </div>
-            <div class="jazz-ctrl">
-              <button class="jbtn" title="shuffle">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
-              </button>
-              <button class="jbtn" title="prev">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4"/><rect x="5" y="4" width="2" height="16"/></svg>
-              </button>
-              <button class="jbtn jplay" title="play">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21"/></svg>
-              </button>
-              <button class="jbtn" title="next">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20"/><rect x="17" y="4" width="2" height="16"/></svg>
-              </button>
-              <button class="jbtn" title="repeat">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-              </button>
-            </div>
-            <iframe class="jazz-iframe" frameborder="no" border="0"
-                    marginwidth="0" marginheight="0" scrolling="no"
-                    src="https://music.163.com/outchain/player?type=2&id=${id}&auto=1&height=66"></iframe>
-          </div>
-          <div class="jazz-knob-wrap"><div class="jazz-knob"></div></div>`;
-        modalBox.insertBefore(outer, modalBar);
-        activeEl = outer;
+          </div>`;
+        activeIframes = [...macContent.querySelectorAll('iframe')];
 
       } else if (type === 'vimeo') {
         const id = folder.dataset.vimeo;
+        setMac(label, 'Vimeo · wenghao · 2026');
         const iframe = document.createElement('iframe');
-        iframe.className = 'vid';
+        iframe.className = 'mac-vid';
         iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0`;
         iframe.allow = 'autoplay; fullscreen; picture-in-picture';
         iframe.allowFullscreen = true;
-        modalBox.insertBefore(iframe, modalBar);
-        activeEl = iframe;
+        macContent.appendChild(iframe);
+        activeIframes = [iframe];
 
       } else if (type === 'bilibili') {
         const bvid = folder.dataset.bvid;
+        setMac(label, 'Bilibili · wenghao · 2026');
         const iframe = document.createElement('iframe');
-        iframe.className = 'vid';
+        iframe.className = 'mac-vid';
         iframe.src = `//player.bilibili.com/player.html?bvid=${bvid}&page=1&autoplay=1&danmaku=0`;
         iframe.allow = 'autoplay; fullscreen';
         iframe.allowFullscreen = true;
-        modalBox.insertBefore(iframe, modalBar);
-        activeEl = iframe;
+        macContent.appendChild(iframe);
+        activeIframes = [iframe];
 
       } else if (type === 'external') {
-        window.open(folder.dataset.url, '_blank', 'noopener');
-        return;
+        const url = folder.dataset.url;
+        setMac(label, '微信公众号 · wenghao · 2026');
+        macContent.innerHTML = `
+          <div class="mac-external">
+            <div class="mac-ext-icon">📁</div>
+            <div class="mac-ext-name">${label}</div>
+            <div class="mac-ext-sub">在新窗口打开链接</div>
+            <button class="mac-ext-btn" onclick="window.open('${url}','_blank','noopener')">打开</button>
+          </div>`;
 
       } else {
-        const msg = document.createElement('div');
-        msg.style.cssText = 'width:min(480px,86vw);aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;color:#444;font-family:"DM Mono","PingFang SC",monospace;font-size:12px;letter-spacing:.06em;gap:10px;';
-        msg.innerHTML = '<span style="font-size:26px;opacity:.2">📁</span><span>coming soon</span>';
-        modalBox.insertBefore(msg, modalBar);
-        activeEl = msg;
+        setMac(label, '此文件夹为空');
+        macContent.innerHTML = `
+          <div class="mac-empty">
+            <div class="mac-empty-icon">📂</div>
+            <div class="mac-empty-msg">coming soon</div>
+          </div>`;
       }
 
-      modalLabel.textContent = label;
       modal.classList.add('open');
     });
   });
 
   const closeModal = () => {
     modal.classList.remove('open');
-    modalBox.classList.remove('jazz-mode');
-    if (activeEl) {
-      if (activeEl.querySelectorAll) activeEl.querySelectorAll('iframe').forEach(f => { f.src = ''; });
-      if (activeEl.tagName === 'IFRAME') activeEl.src = '';
-      activeEl.remove(); activeEl = null;
-    }
+    clearContent();
   };
 
   modalClose.addEventListener('click', closeModal);
