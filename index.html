@@ -244,55 +244,44 @@
     }
 
     /* ── Audio (Tiny Player style) ── */
-    .mac-audio {
+    /* ── Audio tracklist (Finder list view) ── */
+    .mac-tracklist {
       width: min(400px, 88vw);
       background: #F6F6F6;
       font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
     }
-    .mac-audio-info {
-      text-align: center;
-      padding: 20px 24px 14px;
-      border-bottom: 1px solid #E8E8E8;
+    .mac-track-header {
+      height: 24px;
+      background: #E4E4E4;
+      border-bottom: 1px solid #D0D0D0;
+      display: flex; align-items: center;
+      padding: 0 12px 0 38px;
+      font-size: 11px; color: #888;
+      user-select: none;
     }
-    .mac-audio-song  { font-size: 15px; font-weight: 700; color: #1C1C1C; margin-bottom: 5px; }
-    .mac-audio-artist{ font-size: 12px; color: #888; }
-
-    .mac-audio-ctrl {
-      display: flex; align-items: center; justify-content: center;
-      gap: 28px; padding: 18px 0 10px;
+    .mac-track-row {
+      display: flex; align-items: center;
+      height: 40px; padding: 0 12px; gap: 9px;
+      cursor: pointer; border-bottom: 1px solid #EFEFEF;
+      transition: background 0.08s;
     }
-    .mac-ctrlbtn {
-      background: none; border: none; cursor: pointer;
-      color: #1C1C1C; display: flex; align-items: center;
-      transition: opacity 0.15s;
+    .mac-track-row:hover:not(.active) { background: #E8EFFE; }
+    .mac-track-row.active { background: #3478F6; color: #FFF; }
+    .mac-track-num {
+      width: 18px; font-size: 11px; color: #BBB;
+      text-align: right; flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
     }
-    .mac-ctrlbtn:hover { opacity: 0.5; }
-
-    .mac-prog {
-      display: flex; align-items: center; gap: 8px;
-      padding: 0 20px 18px;
+    .mac-track-row.active .mac-track-num { color: rgba(255,255,255,0.6); }
+    .mac-track-icon { font-size: 16px; flex-shrink: 0; }
+    .mac-track-name { flex: 1; font-size: 13px; }
+    .mac-track-badge {
+      font-size: 10px; padding: 2px 8px;
+      border-radius: 10px; background: rgba(0,0,0,0.07);
+      color: #888; flex-shrink: 0; letter-spacing: 0.02em;
     }
-    .mac-prog-time {
-      font-size: 11px; color: #888; flex-shrink: 0;
-      width: 30px; font-variant-numeric: tabular-nums;
-    }
-    .mac-prog-time:last-child { text-align: right; }
-    .mac-prog-track {
-      flex: 1; height: 4px; background: #DCDCDC;
-      border-radius: 2px; position: relative;
-    }
-    .mac-prog-fill {
-      height: 100%; width: 0%; background: #3478F6;
-      border-radius: 2px; position: relative;
-      animation: macProg 240s linear forwards;
-    }
-    .mac-prog-dot {
-      position: absolute; right: -6px; top: 50%;
-      transform: translateY(-50%);
-      width: 12px; height: 12px; background: #FFF;
-      border-radius: 50%;
-      border: 1.5px solid #C8C8C8;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    .mac-track-row.active .mac-track-badge {
+      background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.85);
     }
 
     .mac-netease-wrap {
@@ -619,7 +608,7 @@
 <!-- ── AI Jazz: 右下，小，向左微倾 ── -->
 <div class="fw" style="right:9%; top:63%; transform:rotate(-1.8deg);">
   <div class="folder" style="animation-delay:0.44s;"
-       data-type="audio" data-netease="3358142132" data-label="ai jazz">
+       data-type="audio" data-netease="3358142132" data-netease2="3396001070" data-label="ai jazz">
     <svg class="fsvg" style="width:clamp(70px,7.5vw,100px);height:auto;"
          viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
       <defs>
@@ -738,38 +727,36 @@
       clearContent();
 
       if (type === 'audio') {
-        const id = folder.dataset.netease;
+        const tracks = [
+          { id: folder.dataset.netease,  name: 'ai jazz · 01' },
+          { id: folder.dataset.netease2, name: 'ai jazz · 02' },
+        ];
         setMac(label, '网易云音乐 · wenghao · 2026');
         macContent.innerHTML = `
-          <div class="mac-audio">
-            <div class="mac-audio-info">
-              <div class="mac-audio-song">ai jazz</div>
-              <div class="mac-audio-artist">wenghao · 2026</div>
-            </div>
-            <div class="mac-audio-ctrl">
-              <button class="mac-ctrlbtn" title="prev">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4"/><rect x="5" y="4" width="2.5" height="16"/></svg>
-              </button>
-              <button class="mac-ctrlbtn" title="pause">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-              </button>
-              <button class="mac-ctrlbtn" title="next">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20"/><rect x="16.5" y="4" width="2.5" height="16"/></svg>
-              </button>
-            </div>
-            <div class="mac-prog">
-              <span class="mac-prog-time">0:00</span>
-              <div class="mac-prog-track">
-                <div class="mac-prog-fill"><div class="mac-prog-dot"></div></div>
-              </div>
-              <span class="mac-prog-time" style="text-align:right">4:00</span>
-            </div>
+          <div class="mac-tracklist">
+            <div class="mac-track-header"><span>名称</span></div>
+            ${tracks.map((t, i) => `
+              <div class="mac-track-row${i === 0 ? ' active' : ''}" data-tid="${t.id}">
+                <span class="mac-track-num">${i + 1}</span>
+                <span class="mac-track-icon">🎵</span>
+                <span class="mac-track-name">${t.name}</span>
+                <span class="mac-track-badge">网易云</span>
+              </div>`).join('')}
             <div class="mac-netease-wrap">
-              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"
-                      src="https://music.163.com/outchain/player?type=2&id=${id}&auto=1&height=66"></iframe>
+              <iframe id="neteasePlayer" frameborder="no" border="0"
+                      marginwidth="0" marginheight="0" scrolling="no"
+                      src="https://music.163.com/outchain/player?type=2&id=${tracks[0].id}&auto=1&height=66"></iframe>
             </div>
           </div>`;
-        activeIframes = [...macContent.querySelectorAll('iframe')];
+        const nf = macContent.querySelector('#neteasePlayer');
+        macContent.querySelectorAll('.mac-track-row').forEach(row => {
+          row.addEventListener('click', () => {
+            macContent.querySelectorAll('.mac-track-row').forEach(r => r.classList.remove('active'));
+            row.classList.add('active');
+            nf.src = `https://music.163.com/outchain/player?type=2&id=${row.dataset.tid}&auto=1&height=66`;
+          });
+        });
+        activeIframes = [nf];
 
       } else if (type === 'vimeo') {
         const id = folder.dataset.vimeo;
