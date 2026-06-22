@@ -547,7 +547,7 @@
 <!-- ── ai-tvc: 字母A和S之间 ── -->
 <div class="fw" style="left:63%; top:41%; transform:rotate(3.4deg);">
   <div class="folder" style="animation-delay:0.05s;"
-       data-type="vimeo" data-vimeo="1202148449" data-label="ai-tvc">
+       data-type="external" data-url="http://xhslink.com/o/3uLXYsQW5RC" data-label="ai-tvc">
     <svg class="fsvg" style="width:clamp(90px,9vw,136px);height:auto;"
          viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" overflow="visible">
       <defs>
@@ -795,7 +795,8 @@
 
       } else if (type === 'external') {
         const url = folder.dataset.url;
-        setMac(label, '微信公众号 · wenghao · 2026');
+        const statusSrc = label === 'ai-tvc' ? '小红书' : '微信公众号';
+        setMac(label, statusSrc + ' · wenghao · 2026');
         macContent.innerHTML = `
           <div class="mac-external">
             <div class="mac-ext-icon">📁</div>
